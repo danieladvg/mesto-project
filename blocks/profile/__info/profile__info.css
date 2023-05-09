@@ -15,5 +15,6 @@
         row-gap: 14px;
         column-gap: 10px;
         margin: 26px auto 36px;
+        max-height: 54px;
     }
 }

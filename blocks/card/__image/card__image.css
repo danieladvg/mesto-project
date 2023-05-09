@@ -1,4 +1,4 @@
-.elements__card-image {
+.card__image {
     object-fit: cover;
     min-height: 282px;
     max-height: 282px;

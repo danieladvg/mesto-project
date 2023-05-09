@@ -4,6 +4,9 @@
     padding: 66px 0 60px;
     display: flex;
     color: #545454;
+    font-size: 18px;
+    line-height: 22px;
+    max-height: 18px;
 }
 
 @media screen and (max-width: 890px) {

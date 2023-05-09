@@ -16,59 +16,57 @@
 
         <main class="main">
             <section class="profile">
-                <div class="profile__avatar">
                     <img class="profile__avatar-image" src="./images/avatar.PNG" alt="аватар">
-                </div>
                 <div class="profile__info">
                     <h1 class="profile__name">Frequent flyer traveller</h1>
-                    <button class="profile__edit-button"></button>
+                    <button class="profile__edit-button" type="button"></button>
                     <p class="profile__description">Куда летим в этот раз?</p>
                 </div>
-                <button class="profile__add-button"></button>
+                <button class="profile__add-button" type="button"></button>
             </section>
 
             <section class="elements-container">
                 <ul class="elements">
-                <li class="elements__card">
-                    <img class="elements__card-image" src="./images/for cards/irkutsk.jpeg" alt="Иркутск">
-                    <div class="elements__info">
-                        <h2 class="elements__title">Иркутск</h2>
-                        <button class="elements__like-button"></button>
+                <li class="card">
+                    <img class="card__image" src="./images/for_cards/irkutsk.jpeg" alt="Иркутск">
+                    <div class="card__info">
+                        <h2 class="card__title">Иркутск</h2>
+                        <button class="card__like-button" type="button"></button>
                     </div>
                 </li>
-                <li class="elements__card">
-                    <img class="elements__card-image" src="./images/for cards/khabarovsk.jpeg" alt="Хабаровск">
-                    <div class="elements__info">
-                        <h2 class="elements__title">Хабаровск</h2>
-                        <button class="elements__like-button"></button>
+                <li class="card">
+                    <img class="card__image" src="./images/for_cards/khabarovsk.jpeg" alt="Хабаровск">
+                    <div class="card__info">
+                        <h2 class="card__title">Хабаровск</h2>
+                        <button class="card__like-button" type="button"></button>
                     </div>
                 </li>
-                <li class="elements__card">
-                    <img class="elements__card-image" src="./images/for cards/krasnoyarsk.jpeg" alt="Красноярск">
-                    <div class="elements__info">
-                        <h2 class="elements__title">Красноярск</h2>
-                        <button class="elements__like-button"></button>
+                <li class="card">
+                    <img class="card__image" src="./images/for_cards/krasnoyarsk.jpeg" alt="Красноярск">
+                    <div class="card__info">
+                        <h2 class="card__title">Красноярск</h2>
+                        <button class="card__like-button" type="button"></button>
                     </div>
                 </li>
-                <li class="elements__card">
-                    <img class="elements__card-image" src="./images/for cards/petropavlovsk-kamchatsky.jpeg" alt="Петропавловск-Камчатский">
-                    <div class="elements__info">
-                        <h2 class="elements__title">Петропавловск-Камчатский</h2>
-                        <button class="elements__like-button"></button>
+                <li class="card">
+                    <img class="card__image" src="./images/for_cards/petropavlovsk-kamchatsky.jpeg" alt="Петропавловск-Камчатский">
+                    <div class="card__info">
+                        <h2 class="card__title">Петропавловск-Камчатский</h2>
+                        <button class="card__like-button" type="button"></button>
                     </div>
                 </li>
-                <li class="elements__card">
-                    <img class="elements__card-image" src="./images/for cards/vladivostok.jpeg" alt="Владивосток">
-                    <div class="elements__info">
-                        <h2 class="elements__title">Владивосток</h2>
-                        <button class="elements__like-button"></button>
+                <li class="card">
+                    <img class="card__image" src="./images/for_cards/vladivostok.jpeg" alt="Владивосток">
+                    <div class="card__info">
+                        <h2 class="card__title">Владивосток</h2>
+                        <button class="card__like-button" type="button"></button>
                     </div>
                 </li>
-                <li class="elements__card">
-                    <img class="elements__card-image" src="./images/for cards/yuzhno-sakhalinsk.jpeg" alt="Южно-Сахалинск">
-                    <div class="elements__info">
-                        <h2 class="elements__title">Южно-Сахалинск</h2>
-                        <button class="elements__like-button"></button>
+                <li class="card">
+                    <img class="card__image" src="./images/for_cards/yuzhno-sakhalinsk.jpeg" alt="Южно-Сахалинск">
+                    <div class="card__info">
+                        <h2 class="card__title">Южно-Сахалинск</h2>
+                        <button class="card__like-button" type="button"></button>
                     </div>
                 </li>
                 </ul>
@@ -82,12 +80,12 @@
         <section class="popup">
             <div class="popup__container">
                 <h2 class="popup__title">Редактировать профиль</h2>
-                <form class="popup__form">
-                    <input class="popup__input popup__profile-name" name="profile-name" value="Frequent flyer traveller" id="popup__profile-name" placeholder="Имя" type="text">
-                    <input class="popup__input popup__description" name="profile-description" value="Куда летим в этот раз?" id="popup__description" placeholder="О себе" type="text">
+                <form class="popup__form" name="popup__edit-form">
+                    <input class="popup__input popup__input_value_profile-name" name="profile-name" value="Frequent flyer traveller" id="popup__profile-name" placeholder="Имя" type="text">
+                    <input class="popup__input popup__input_value_description" name="profile-description" value="Куда летим в этот раз?" id="popup__description" placeholder="О себе" type="text">
                     <button class="popup__save-button" type="submit">Сохранить</button>
                 </form>
-                <button class="popup__close-button"></button>
+                <button class="popup__close-button" type="button"></button>
             </div>
         </section>
 
