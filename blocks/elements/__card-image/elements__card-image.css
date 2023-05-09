@@ -1,0 +1,6 @@
+.elements__card-image {
+    object-fit: cover;
+    min-height: 282px;
+    max-height: 282px;
+    width: 100%;
+}
