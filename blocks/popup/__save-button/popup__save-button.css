@@ -1,5 +1,6 @@
 .popup__save-button {
     margin-bottom: 37px;
+    padding: 0;
     background-color: #000;
     color: #fff;
     border: none;
