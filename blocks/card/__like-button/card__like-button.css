@@ -14,4 +14,5 @@
 .card__like-button:hover {
     cursor: pointer;
     opacity: .5;
+    transition: .5s;
 }

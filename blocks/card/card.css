@@ -3,4 +3,6 @@
     overflow: hidden;
     background-color: #fff;
     max-height: 361px;
+    position: relative;
+    
 }
