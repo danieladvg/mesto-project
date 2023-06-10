@@ -1,65 +1,29 @@
-const initialCards = [
-    {
-        name: 'Архыз',
-        link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/arkhyz.jpg'
-    },
-    {
-        name: 'Челябинская область',
-        link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/chelyabinsk-oblast.jpg'
-    },
-    {
-        name: 'Иваново',
-        link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/ivanovo.jpg'
-    },
-    {
-        name: 'Камчатка',
-        link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/kamchatka.jpg'
-    },
-    {
-        name: 'Холмогорский район',
-        link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/kholmogorsky-rayon.jpg'
-    },
-    {
-        name: 'Байкал',
-        link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/baikal.jpg'
-    }
-    ];
+const sectionProfile = document.querySelector('.profile'); //секция profile
+const profileName = sectionProfile.querySelector('.profile__name'); //имя профиля
+const profileDescription = sectionProfile.querySelector('.profile__description'); //информация о себе
+const profileEditButton = sectionProfile.querySelector('.profile__edit-button'); //кнопка редактирования профиля
 
-const profile = document.querySelector('.profile'); //секция profile
-const profileName = profile.querySelector('.profile__name'); //имя профиля
-const profileDescription = profile.querySelector('.profile__description'); //информация о себе
-const profileEditButton = profile.querySelector('.profile__edit-button'); //кнопка редактирования профиля
 
-const popup = document.querySelector('.popup'); //модальное окно
 const popupEditProfile = document.querySelector('.popup_type_editProfile'); //модальное окно (редактировать профиль)
-const formElement = document.querySelector('.popup__form'); //форма
-const nameInput = popup.querySelector('#popup__profile-name'); //поле ввода имени профиля
-const jobInput = popup.querySelector('#popup__description'); //поле ввода информации о себе
-const saveButton = popup.querySelector('.popup__save-button'); //кнопка сохранить
-const closeButtonEditProfile = document.querySelector('#editProfile-close-button'); //кнопка закрыть окно редактировать профиль
+const formElementEditProfile = popupEditProfile.querySelector('.popup__form'); //форма (редактировать профиль)
+const nameInput = popupEditProfile.querySelector('#popup__profile-name'); //поле ввода имени профиля
+const jobInput = popupEditProfile.querySelector('#popup__description'); //поле ввода информации о себе
 
 
 const popupAddCard = document.querySelector('.popup_type_addCard'); //модальное окно (добавить карточку)
-const addCardButton = profile.querySelector('.profile__add-button'); //кнопка добавить карточку
-const cardNameInput = document.querySelector('#popup__card-name'); //поле ввода названия карточки
-const cardUrlInput = document.querySelector('#popup__card-url'); //поле ввода ссылки на карточку
-const closeButtonAddCard = document.querySelector('#addCard-close-button') //кнопка закрыть окно добавить карточку
-const formElementAddCard = document.querySelector('#cardFormPopup');//форма 
-
-const cardTitle = document.querySelector('.card__title'); //название карточки
-const cardImage = document.querySelector('.card__image'); //изображение карточки
+const buttonAddCard = sectionProfile.querySelector('.profile__add-button'); //кнопка добавить карточку
+const cardNameInput = popupAddCard.querySelector('#popup__card-name'); //поле ввода названия карточки
+const cardUrlInput = popupAddCard.querySelector('#popup__card-url'); //поле ввода ссылки на карточку
+const formElementAddCard = popupAddCard.querySelector('#cardFormPopup');//форма (добавить карточку)
 
 
 const elementsContainer = document.querySelector('.elements-container'); //контейнер для карточек
 const cardTemplate = document.querySelector('#cardTemplate').content; //шаблон карточки
 
 const popupImagePreview = document.querySelector('.popup_type_image-preview');// модальное окно (увеличить изображение карточки)
-const closeButtonImagePreview = document.querySelector('#imagePreview-close-button');//кнопка закрыть окно просмотра изображения карточки
 
 const bigImageName = document.querySelector('.popup__image-name'); //название большого изображения
 const imageUrl = document.querySelector('.popup__image'); //ссылка на большое изображение
-
-
 
 
 function openPopup(popup) {
@@ -70,27 +34,22 @@ function closePopup(popup) {
     popup.classList.remove('popup_opened');
 }
 
+//кнопки закрыть (крестики) модальных окон
+document.querySelectorAll('.popup__close-button').forEach(button => {
+    const closeButtonsPopup = button.closest('.popup');
+    button.addEventListener('click', () => closePopup(closeButtonsPopup));
+    }); 
+
 profileEditButton.addEventListener('click', function () {
     openPopup(popupEditProfile);
-    nameInput.setAttribute('value', profileName.textContent);
-    jobInput.setAttribute('value', profileDescription.textContent);
+    nameInput.value = profileName.textContent;
+    jobInput.value = profileDescription.textContent;
 });
 
-addCardButton.addEventListener('click', function () {
+buttonAddCard.addEventListener('click', function () {
     openPopup(popupAddCard);
 }) 
 
-closeButtonEditProfile.addEventListener('click', function () {
-    closePopup(popupEditProfile)
-});
-
-closeButtonAddCard.addEventListener('click', function () {
-    closePopup(popupAddCard)
-});
-
-closeButtonImagePreview.addEventListener('click', function () {
-    closePopup(popupImagePreview)
-});
 
 const openImagePreview = function(data) {
     bigImageName.textContent = data.name;
@@ -100,15 +59,15 @@ const openImagePreview = function(data) {
     openPopup(popupImagePreview);
 }
 
-//функция сохранить инфо профиля
-function formSubmitHandler (evt) {
+//функция сохранить (отправить) инфо профиля
+function handleFormSubmit (evt) {
     evt.preventDefault();
     profileName.textContent = nameInput.value;
     profileDescription.textContent = jobInput.value;
     closePopup(popupEditProfile);
 }
+formElementEditProfile.addEventListener('submit', handleFormSubmit);
 
-formElement.addEventListener('submit', formSubmitHandler);
 
 // функция создания карточки
 function createCard(data) {
@@ -133,10 +92,8 @@ function createCard(data) {
 
     cardImage.addEventListener('click', () => openImagePreview(data));
 
-
     return cardElement; 
 }
-
 
 
 //функция добавления карточки
