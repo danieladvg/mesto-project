@@ -60,13 +60,13 @@ const openImagePreview = function(data) {
 }
 
 //функция сохранить (отправить) инфо профиля
-function handleFormSubmit (evt) {
+function handleProfileFormSubmit (evt) {
     evt.preventDefault();
     profileName.textContent = nameInput.value;
     profileDescription.textContent = jobInput.value;
     closePopup(popupEditProfile);
 }
-formElementEditProfile.addEventListener('submit', handleFormSubmit);
+formElementEditProfile.addEventListener('submit', handleProfileFormSubmit);
 
 
 // функция создания карточки
