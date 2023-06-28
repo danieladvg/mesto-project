@@ -2,19 +2,17 @@
     min-width: 358px;
     min-height: 27px;
     font-weight: 400;
-    font-size: 14px;
-    line-height: 17px;
     padding: 0;
-    margin-bottom: 29px;
+    /* margin-bottom: 29px; */
     border-bottom: 1px solid rgba(0, 0, 0, .2);
     border-top: none;
     border-right: none;
     border-left: none;
 }
 
-.popup__input:last-of-type {
+/* .popup__input:last-of-type {
     margin-bottom: 47px;
-}
+} */
 
 @media screen and (max-width: 600px) {
     .popup__input {

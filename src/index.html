@@ -43,11 +43,17 @@
         <section class="popup popup_type_editProfile">
             <div class="popup__container">
                 <h2 class="popup__title">Редактировать профиль</h2>
-                <form class="popup__form" name="popup__edit-form">
+                <form class="popup__form" id="editProfileFormPopup" name="popup__edit-form" novalidate>
+                    <label for="profile-name" class="popup__label">
                     <input class="popup__input popup__input_value_profile-name" name="profile-name"
-                        value="" id="popup__profile-name" placeholder="Имя" type="text">
+                        value="" id="profile-name-input" placeholder="Имя" type="text" pattern="^[A-Za-zА-Яа-яЁё\s-]+$" data-error-message="Разрешены только латинские, кириллические буквы, знаки дефиса и пробелы." required minlength="2" maxlength="40">
+                    <span for="profile-name" class="profile-name-input-error popup__input-error"></span>
+                    </label>
+                    <label for="profile-description" class="popup__label">
                     <input class="popup__input popup__input_value_description" name="profile-description"
-                        value="" id="popup__description" placeholder="О себе" type="text">
+                        value="" id="description-input" placeholder="О себе" type="text" pattern="^[A-Za-zА-Яа-яЁё\s?-]+$" data-error-message="Разрешены только латинские, кириллические буквы, знаки дефиса, вопроса и пробелы." required minlength="2" maxlength="200">
+                    <span for="profile-description" class="description-input-error popup__input-error"></span>
+                    </label>
                     <button class="popup__save-button" type="submit">Сохранить</button>
                 </form>
                 <button class="popup__close-button" id="editProfile-close-button" type="button"></button>
@@ -58,12 +64,18 @@
         <section class="popup popup_type_addCard">
             <div class="popup__container">
                 <h2 class="popup__title">Новое место</h2>
-                <form class="popup__form" id="cardFormPopup" name="popup__edit-form">
+                <form class="popup__form" id="cardFormPopup" name="popup__addCard-form" novalidate>
+                    <label for="card-name" class="popup__label">
                     <input class="popup__input popup__input_value_card-name" name="card-name"
-                        value="" id="popup__card-name" placeholder="Название" type="text">
+                        value="" id="card-name-input" placeholder="Название" type="text" pattern="^[A-Za-zА-Яа-яЁё\s-]+$" data-error-message="Разрешены только латинские, кириллические буквы, знаки дефиса и пробелы." required minlength="2" maxlength="30">
+                        <span for="card-name" class="card-name-input-error popup__input-error"></span>
+                    </label>
+                    <label for="card-url" class="popup__label">
                     <input class="popup__input popup__input_value_card-url" name="card-url"
-                        value="" id="popup__card-url" placeholder="Ссылка на картинку" type="url">
-                    <button class="popup__save-button"  type="submit">Создать</button>
+                        value="" id="card-url-input" placeholder="Ссылка на картинку" type="url" required>
+                        <span for="card-url" class="card-url-input-error popup__input-error"></span>
+                    </label>
+                    <button class="popup__save-button"  type="submit" disabled>Создать</button>
                 </form>
                 <button class="popup__close-button" id="addCard-close-button" type="button"></button>
             </div>
@@ -78,7 +90,6 @@
             </div>
         </section>
 
-
         <!--шаблон карточки-->
         <template id="cardTemplate">
                 <li class="card">
@@ -92,8 +103,14 @@
         </template>
 
     </div>
-    <script src="./cards.js"></script>
-    <script src="./script.js"></script>
+    
+    <script type="module" src="./components/cards.js"></script>
+    <script type="module" src="./components/card.js"></script>
+    <script type="module" src="./components/modal.js"></script>
+    <script type="module" src="./components/utils.js"></script>
+    <script type="module" src="./components/validate.js"></script>
+    <script type="module" src="./components/index.js"></script>
+    
 </body>
 
 </html>
