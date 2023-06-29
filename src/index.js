@@ -1,6 +1,10 @@
-import{enableValidation} from './validate.js'
-import{closePopupByEsc, closePopupByOverlay, openPopup} from './modal.js';
-import{handleProfileFormSubmit} from './utils.js';
+import './pages/index.css';
+
+import{enableValidation} from './components/validate.js'
+import{closePopupByOverlay, openPopup} from './components/modal.js';
+import{handleProfileFormSubmit} from './components/utils.js';
+import{initialCards, addCard} from './components/card.js';
+
 
 export const sectionProfile = document.querySelector('.profile'); //секция profile
 export const profileName = sectionProfile.querySelector('.profile__name'); //имя профиля
@@ -32,6 +36,13 @@ export const inputElement = formElement.querySelector('.popup__input'); //эле
 export const page = document.querySelector('.page'); //элемент body
 
 
+
+
+initialCards.forEach(function(item) {
+    addCard(item, elementsContainer);
+});
+
+
 //открытие модального окна (редактировать профиль)
 profileEditButton.addEventListener('click', function () {
     openPopup(popupEditProfile);
@@ -44,12 +55,12 @@ buttonAddCard.addEventListener('click', function () {
     openPopup(popupAddCard);
 }) 
 
-
+//слушатель - закрыть модальное окно кликом на фон
 page.addEventListener('click', function(e) {
     closePopupByOverlay(e);
 });
 
-
+//слушатель на форме редактировать профиль
 formElementEditProfile.addEventListener('submit', handleProfileFormSubmit);
 
 

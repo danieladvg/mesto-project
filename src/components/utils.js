@@ -1,4 +1,4 @@
-import{profileName, profileDescription, nameInput, jobInput, popupEditProfile} from './index.js';
+import{profileName, profileDescription, nameInput, jobInput, popupEditProfile} from '../index.js';
 import{closePopup} from './modal.js';
 
 //функция сохранить (отправить) инфо профиля

@@ -1,17 +1,39 @@
-import{initialCards} from './cards.js';
-import{elementsContainer, popupAddCard, formElementAddCard, cardTemplate, cardNameInput, cardUrlInput, page} from './index.js';
+import{elementsContainer, popupAddCard, formElementAddCard, cardTemplate, cardNameInput, cardUrlInput, page} from '../index.js';
 import{openImagePreview, closePopup} from './modal.js';
 
+
+export const initialCards = [
+    {
+        name: 'Архыз',
+        link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/arkhyz.jpg'
+    },
+    {
+        name: 'Челябинская область',
+        link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/chelyabinsk-oblast.jpg'
+    },
+    {
+        name: 'Иваново',
+        link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/ivanovo.jpg'
+    },
+    {
+        name: 'Камчатка',
+        link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/kamchatka.jpg'
+    },
+    {
+        name: 'Холмогорский район',
+        link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/kholmogorsky-rayon.jpg'
+    },
+    {
+        name: 'Байкал',
+        link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/baikal.jpg'
+    }
+    ];
 
 //функция добавления карточки
 function addCard(data, container) {
     const card = createCard(data);
     elementsContainer.prepend(card);
 };
-
-initialCards.forEach(function(item) {
-    addCard(item, elementsContainer);
-});
 
 //функция создать новую карточку 
 formElementAddCard.addEventListener('submit', function(evt) {
@@ -53,6 +75,4 @@ function createCard(data) {
     return cardElement; 
 }
 
-
-
-export{createCard, addCard };
+export{addCard};
