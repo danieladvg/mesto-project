@@ -1,5 +1,5 @@
-import{elementsContainer, popupAddCard, formElementAddCard, cardTemplate, cardNameInput, cardUrlInput, page} from '../index.js';
-import{openImagePreview, closePopup} from './modal.js';
+import{elementsContainer, cardTemplate} from '../index.js';
+import{openImagePreview} from './modal.js';
 
 
 export const initialCards = [
@@ -34,20 +34,6 @@ function addCard(data, container) {
     const card = createCard(data);
     elementsContainer.prepend(card);
 };
-
-//функция создать новую карточку 
-formElementAddCard.addEventListener('submit', function(evt) {
-    evt.preventDefault();
-    const cardData = {
-        name: cardNameInput.value,
-        link: cardUrlInput.value
-    }
-
-    formElementAddCard.reset();
-
-    addCard(cardData, elementsContainer);
-    closePopup(popupAddCard)
-});
 
 // функция создания карточки
 function createCard(data) {

@@ -1,13 +1,13 @@
 .popup__label {
     display: flex;
     flex-direction: column;
-    margin-bottom: 13px;
+    margin: 0;
     max-width: 358px;
 }
 
-.popup__label:last-of-type {
-    margin-bottom: 30px;
-}
+/* .popup__label:last-of-type {
+    margin: 0 0 10px 0;
+} */
 
 @media screen and (max-width: 600px) {
     .popup__label {

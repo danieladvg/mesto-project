@@ -13,14 +13,14 @@
 <body class="page">
     <div class="content">
         <header class="header">
-            <img class="header__logo" src="./images/logo.svg" alt="логотип Mesto">
+            <img class="header__logo" src="<%=require('./images/logo.svg')%>" alt="логотип Mesto">
         </header>
 
         <main class="main">
 
             <!--секция - информация профиля-->
             <section class="profile">
-                <img class="profile__avatar-image" src="./images/avatar.png" alt="аватар">
+                <img class="profile__avatar-image" src="<%=require('./images/avatar.png')%>" alt="аватар">
                 <div class="profile__info">
                     <h1 class="profile__name">Frequent flyer traveller</h1>
                     <button class="profile__edit-button" type="button"></button>

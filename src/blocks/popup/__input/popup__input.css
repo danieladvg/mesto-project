@@ -1,4 +1,6 @@
 .popup__input {
+    display: flex;
+    justify-content: flex-start;
     min-width: 358px;
     min-height: 27px;
     font-weight: 400;
@@ -9,10 +11,6 @@
     border-right: none;
     border-left: none;
 }
-
-/* .popup__input:last-of-type {
-    margin-bottom: 47px;
-} */
 
 @media screen and (max-width: 600px) {
     .popup__input {

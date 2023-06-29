@@ -1,7 +1,7 @@
 import './pages/index.css';
 
 import{enableValidation} from './components/validate.js'
-import{closePopupByOverlay, openPopup} from './components/modal.js';
+import{closePopupByOverlay, openPopup, closePopup} from './components/modal.js';
 import{handleProfileFormSubmit} from './components/utils.js';
 import{initialCards, addCard} from './components/card.js';
 
@@ -42,6 +42,19 @@ initialCards.forEach(function(item) {
     addCard(item, elementsContainer);
 });
 
+//функция создать новую карточку 
+formElementAddCard.addEventListener('submit', function(evt) {
+    evt.preventDefault();
+    const cardData = {
+        name: cardNameInput.value,
+        link: cardUrlInput.value
+    }
+
+    formElementAddCard.reset();
+
+    addCard(cardData, elementsContainer);
+    closePopup(popupAddCard)
+});
 
 //открытие модального окна (редактировать профиль)
 profileEditButton.addEventListener('click', function () {
