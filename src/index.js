@@ -1,9 +1,9 @@
 import './pages/index.css';
 
-import{enableValidation} from './components/validate.js'
-import{closePopupByOverlay, openPopup, closePopup} from './components/modal.js';
-import{handleProfileFormSubmit} from './components/utils.js';
-import{initialCards, addCard} from './components/card.js';
+import{enableValidation, handleSubmitButton} from './components/validate.js'
+import{openPopup, closePopup} from './components/modal.js';
+import{addCard} from './components/card.js';
+import{initialCards} from './components/cards.js'
 
 
 export const sectionProfile = document.querySelector('.profile'); //секция profile
@@ -21,22 +21,39 @@ export const buttonAddCard = sectionProfile.querySelector('.profile__add-button'
 export const cardNameInput = popupAddCard.querySelector('#card-name-input'); //поле ввода названия карточки
 export const cardUrlInput = popupAddCard.querySelector('#card-url-input'); //поле ввода ссылки на карточку
 export const formElementAddCard = popupAddCard.querySelector('#cardFormPopup');//форма (добавить карточку)
+const buttonCreateCard = popupAddCard.querySelector('.popup__save-button'); //кнопка создать карточку
 
 export const elementsContainer = document.querySelector('.elements-container'); //контейнер для карточек
 export const cardTemplate = document.querySelector('#cardTemplate').content; //шаблон карточки
 
 export const popupImagePreview = document.querySelector('.popup_type_image-preview');// модальное окно (увеличить изображение карточки)
-
 export const bigImageName = document.querySelector('.popup__image-name'); //название большого изображения
 export const imageUrl = document.querySelector('.popup__image'); //ссылка на большое изображение
 
 export const formElement = document.querySelector('.popup__form'); //элемент формы
 export const inputElement = formElement.querySelector('.popup__input'); //элемент поля ввода
 
-export const page = document.querySelector('.page'); //элемент body
+export const page = document.querySelector('.page');//элемент body
 
 
 
+export const validationConfig = {
+    formSelector: '.popup__form',
+    inputSelector: '.popup__input',
+    submitButtonSelector: '.popup__save-button',
+    inactiveButtonClass: 'popup__save-button_inactive',
+    inputErrorClass: 'popup__input_type_error',
+    errorClass: 'popup__input-error_active'
+};
+
+
+//функция сохранить (отправить) инфо профиля
+function handleProfileFormSubmit (evt) {
+    evt.preventDefault();
+    profileName.textContent = nameInput.value;
+    profileDescription.textContent = jobInput.value;
+    closePopup(popupEditProfile);
+}
 
 initialCards.forEach(function(item) {
     addCard(item, elementsContainer);
@@ -51,9 +68,9 @@ formElementAddCard.addEventListener('submit', function(evt) {
     }
 
     formElementAddCard.reset();
-
+    handleSubmitButton(buttonCreateCard);
     addCard(cardData, elementsContainer);
-    closePopup(popupAddCard)
+    closePopup(popupAddCard);
 });
 
 //открытие модального окна (редактировать профиль)
@@ -68,20 +85,7 @@ buttonAddCard.addEventListener('click', function () {
     openPopup(popupAddCard);
 }) 
 
-//слушатель - закрыть модальное окно кликом на фон
-page.addEventListener('click', function(e) {
-    closePopupByOverlay(e);
-});
-
 //слушатель на форме редактировать профиль
 formElementEditProfile.addEventListener('submit', handleProfileFormSubmit);
 
-
-enableValidation({
-    formSelector: '.popup__form',
-    inputSelector: '.popup__input',
-    submitButtonSelector: '.popup__save-button',
-    inactiveButtonClass: 'popup__save-button_inactive',
-    inputErrorClass: 'popup__input_type_error',
-    errorClass: 'popup__input-error_active'
-});
+enableValidation(validationConfig);
