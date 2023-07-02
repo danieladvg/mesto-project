@@ -22,10 +22,8 @@ function closePopupByOverlay(e) {
 //закрытие модального окна по нажатию Escape
 function closePopupByEsc(e) {
     if(e.key === 'Escape') {
-        const overlay = document.querySelectorAll('.popup_opened');
-        overlay.forEach(popup => {
-            closePopup(popup);
-        })
+        const overlay = document.querySelector('.popup_opened');
+        closePopup(overlay);
     };
 }
 
