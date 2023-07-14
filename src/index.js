@@ -45,6 +45,7 @@ export const inputElement = formElement.querySelector('.popup__input'); //эле
 
 export let userId;
 
+//объект настроек валидации форм
 export const validationConfig = {
     formSelector: '.popup__form',
     inputSelector: '.popup__input',
@@ -98,8 +99,8 @@ function handleUpdateAvatarFormSubmit (evt) {
 //функция сохранить (отправить) инфо профиля
 function handleProfileFormSubmit (evt) {
     evt.preventDefault();
-    const form = evt.target;
-    const button = form.querySelector('.popup__save-button');
+    // const form = evt.target;
+    const button = evt.submitter;
     toggleSaveButtonText(button, true);
 
     fetchEditProfileInfo({name: nameInput.value, about: jobInput.value})
@@ -125,7 +126,7 @@ function handleProfileFormSubmit (evt) {
 function handleAddCardFormSubmit (evt, settings) {
     evt.preventDefault();
     const form = evt.target;
-    const button = form.querySelector('.popup__save-button');
+    const button = evt.submitter;
     const cardName = cardNameInput.value;
     const cardUrl = cardUrlInput.value;
     const item = {

@@ -65,6 +65,7 @@ function createCard(item, userId) {
                 cardLikeCounter.textContent = res.likes.length;
                 cardLikeButton.classList.remove("card__like-button_active");
             })
+            .catch((err) => console.log(err));
         } else {
             fetchLikeCard(cardId)
             .then((res) => {
@@ -72,6 +73,7 @@ function createCard(item, userId) {
                 cardLikeButton.classList.add("card__like-button_active");
                 cardLikeCounter.classList.add("card__like-counter_active");
         })
+        .catch((err) => console.log(err));
         }
     })
 
@@ -80,7 +82,8 @@ function createCard(item, userId) {
         fetchDeleteCard(cardId)
         .then((res) => {
             e.target.closest('.card').remove();
-        })    
+        })
+        .catch((err) => console.log(err));    
     })
 
     cardImage.addEventListener('click', () => openImagePreview(item));
