@@ -1,5 +1,4 @@
-
-export const toggleButtonText = (button, state) => {
+export const toggleSaveButtonText = (button, state) => {
     if (state) {
         button.textContent = 'Сохранение...';
     } else {

@@ -2,12 +2,11 @@ import './pages/index.css';
 
 import{enableValidation, handleSubmitButton} from './components/validate.js'
 import{openPopup, closePopup} from './components/modal.js';
-import{addCard} from './components/card.js';
+import{renderCards, createCard} from './components/card.js';
 // import{initialCards} from './components/cards.js'
 
-import {fetchDeleteCard, fetchPostCard, fetchEditProfileInfo, fetchEditAvatar, fetchGetProfileInfo, fetchGetCards } from './components/api.js';
-
-
+import {fetchPostCard, fetchEditProfileInfo, fetchEditAvatar, fetchGetProfileInfo, fetchGetCards} from './components/api.js';
+import { toggleSaveButtonText } from './components/utils';
 
 export const sectionProfile = document.querySelector('.profile'); //секция profile
 export const profileName = sectionProfile.querySelector('.profile__name'); //имя профиля
@@ -36,7 +35,6 @@ export const buttonCreateCard = popupAddCard.querySelector('#addCard-save-button
 
 export const elementsContainer = document.querySelector('.elements-container'); //контейнер для карточек
 export const cardTemplate = document.querySelector('#cardTemplate').content; //шаблон карточки
-// export const cardLikeCounter = document.querySelector('.card__like-counter'); //счетчик лайков карточки
 
 export const popupImagePreview = document.querySelector('.popup_type_image-preview');// модальное окно (увеличить изображение карточки)
 export const bigImageName = document.querySelector('.popup__image-name'); //название большого изображения
@@ -57,63 +55,33 @@ export const validationConfig = {
 };
 
 
-//получение данных пользователя
-export function getUserData () {
-    fetchGetProfileInfo()
-    .then(function (userData) {
+//получение страницы (данные пользователя + карточки)
+function getPage () {
+    const profileInfo = fetchGetProfileInfo();
+    const cards = fetchGetCards();
+    Promise.all([profileInfo, cards])
+    .then(([userData, cards]) => {
         profileName.textContent = userData.name;
         profileDescription.textContent = userData.about;
         avatarImage.src = userData.avatar;
-        userId = userData._id
-    })
-    .catch(function (error) {
-        console.error(error)}
-    )
-};
-// getProfileData();
-
-
-//получение карточек с сервера
-export function getInitialCardsData () {
-    fetchGetCards()
-    .then(function (data) {
-        data.forEach(function (item) {
-            addCard(item, elementsContainer);
-        });
-    })
-    .catch(function (error) {
-        console.error(error)}
-    );
-};
-// getInitialCardsData();
-
-//получение страницы (данные пользователя + карточки)
-export function getPageData () {
-    const profileData = getUserData();
-    const initialCardsData = getInitialCardsData();
-    Promise.all([profileData, initialCardsData])
-    .then((results) => {
-        const [data, cards] = results;
+        userId = userData._id;
+        renderCards(cards, userId)
     })
     .catch((error) => {
         console.error(error);
     })
 }
-getPageData();
+getPage();
 
-
-
-//функция загрузки (обновления) аватара
-function loadAvatar (data) {
-    avatarImage.src = avatarUrlInput.value;
-};
 
 //функция сохранить (отправить) обновленный аватар
 function handleUpdateAvatarFormSubmit (evt) {
     evt.preventDefault();
-    fetchEditAvatar()
+    toggleSaveButtonText(buttonSaveAvatar, true);
+
+    fetchEditAvatar(avatarUrlInput.value)
     .then((data) => {
-        loadAvatar();
+        avatarImage.src = avatarUrlInput.value;
         formElementUpdateAvatar.reset();
         handleSubmitButton(buttonSaveAvatar);
         closePopup(popupUpdateAvatar);
@@ -121,14 +89,21 @@ function handleUpdateAvatarFormSubmit (evt) {
     .catch((error) => {
         console.error(error);
     })
+    .finally(() => {
+        toggleSaveButtonText(buttonSaveAvatar, false);
+    })
     
 };
 
 //функция сохранить (отправить) инфо профиля
 function handleProfileFormSubmit (evt) {
     evt.preventDefault();
-    fetchEditProfileInfo()
-    .then((data) => {
+    const form = evt.target;
+    const button = form.querySelector('.popup__save-button');
+    toggleSaveButtonText(button, true);
+
+    fetchEditProfileInfo({name: nameInput.value, about: jobInput.value})
+    .then((res) => {
         profileName.textContent = nameInput.value;
         profileDescription.textContent = jobInput.value;
         handleSubmitButton(buttonSaveProfileInfo);
@@ -137,7 +112,9 @@ function handleProfileFormSubmit (evt) {
     .catch((error) => {
         console.error(error);
     })
-    
+    .finally(() => {
+        toggleSaveButtonText(button, false);
+    })
 };
 
 // initialCards.forEach(function(item) {
@@ -145,36 +122,37 @@ function handleProfileFormSubmit (evt) {
 // });
 
 //добавление новой карточки 
-formElementAddCard.addEventListener('submit', function(evt) {
+function handleAddCardFormSubmit (evt, settings) {
     evt.preventDefault();
-    fetchPostCard()
-    .then((data) => {
-        const cardData = {
-            name: cardNameInput.value,
-            link: cardUrlInput.value
-        }
-    
+    const form = evt.target;
+    const button = form.querySelector('.popup__save-button');
+    const cardName = cardNameInput.value;
+    const cardUrl = cardUrlInput.value;
+    const item = {
+        name: cardName,
+        link: cardUrl,
+        owner: {
+            _id: userId
+        },
+        likes: []
+    }
+    toggleSaveButtonText(button, true);
+
+    fetchPostCard(item)
+    .then((res) => {
+        const card = createCard(res);
+        elementsContainer.prepend(card);
         formElementAddCard.reset();
         handleSubmitButton(buttonCreateCard);
-        addCard(cardData, elementsContainer);
         closePopup(popupAddCard);
-    })
+        })
     .catch((error) => {
         console.error(error);
     })
-    
-});
-
-//удаление карточки
-function deleteCard(card) {
-    fetchDeleteCard()
-    .then((data) => {
-        card.remove();
+    .finally(() => {
+        toggleSaveButtonText(button, false);
     })
 }
-
-
-
 
 
 //открытие модального окна (редактировать профиль)
@@ -196,6 +174,9 @@ buttonAddCard.addEventListener('click', function () {
 
 //слушатель на форме редактировать профиль
 formElementEditProfile.addEventListener('submit', handleProfileFormSubmit);
+
+//слушатель на форме добавления карточки
+formElementAddCard.addEventListener('submit', handleAddCardFormSubmit);
 
 //слушатель на форме обновления аватара
 formElementUpdateAvatar.addEventListener('submit', handleUpdateAvatarFormSubmit);
