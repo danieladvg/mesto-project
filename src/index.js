@@ -125,7 +125,6 @@ function handleProfileFormSubmit (evt) {
 //добавление новой карточки 
 function handleAddCardFormSubmit (evt, settings) {
     evt.preventDefault();
-    const form = evt.target;
     const button = evt.submitter;
     const cardName = cardNameInput.value;
     const cardUrl = cardUrlInput.value;
