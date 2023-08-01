@@ -6,7 +6,7 @@ export const config = {
     }
 };
 
-//test
+//new test
 
 
 //проверка ответа сервера на запрос
