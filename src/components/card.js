@@ -1,5 +1,6 @@
 import{elementsContainer, cardTemplate, userId} from '../index.js';
-import { fetchDeleteCard, fetchLikeCard, fetchUnlikeCard } from './api.js';
+// import { fetchDeleteCard, fetchLikeCard, fetchUnlikeCard } from './api.js';
+import { Api } from './api.js';
 import{openImagePreview} from './modal.js';
 
 
@@ -60,14 +61,14 @@ function createCard(item, userId) {
 
     cardLikeButton.addEventListener('click', function(e) {
         if(checkLikeOnCard(cardLikeButton)) {
-            fetchUnlikeCard(cardId)
+            api.fetchUnlikeCard(cardId)
             .then((res) => {
                 cardLikeCounter.textContent = res.likes.length;
                 cardLikeButton.classList.remove("card__like-button_active");
             })
             .catch((err) => console.log(err));
         } else {
-            fetchLikeCard(cardId)
+            api.fetchLikeCard(cardId)
             .then((res) => {
                 cardLikeCounter.textContent = res.likes.length;
                 cardLikeButton.classList.add("card__like-button_active");
@@ -79,7 +80,7 @@ function createCard(item, userId) {
 
     // //функция удаления карточки
     trashButton.addEventListener('click', function (e) {
-        fetchDeleteCard(cardId)
+        api.fetchDeleteCard(cardId)
         .then((res) => {
             e.target.closest('.card').remove();
         })
@@ -91,4 +92,6 @@ function createCard(item, userId) {
     return cardElement; 
 }
 
+
+const api = new Api();
 export {createCard}

@@ -5,7 +5,8 @@ import{openPopup, closePopup} from './components/modal.js';
 import{renderCards, createCard} from './components/card.js';
 // import{initialCards} from './components/cards.js'
 
-import {fetchPostCard, fetchEditProfileInfo, fetchEditAvatar, fetchGetProfileInfo, fetchGetCards} from './components/api.js';
+// import {fetchPostCard, fetchEditProfileInfo, fetchEditAvatar, fetchGetProfileInfo, fetchGetCards} from './components/api.js';
+import { Api } from './components/api';
 import { toggleSaveButtonText } from './components/utils';
 
 export const sectionProfile = document.querySelector('.profile'); //секция profile
@@ -58,8 +59,8 @@ export const validationConfig = {
 
 //получение страницы (данные пользователя + карточки)
 function getPage () {
-    const profileInfo = fetchGetProfileInfo();
-    const cards = fetchGetCards();
+    const profileInfo = api.fetchGetProfileInfo();
+    const cards = api.fetchGetCards();
     Promise.all([profileInfo, cards])
     .then(([userData, cards]) => {
         profileName.textContent = userData.name;
@@ -72,6 +73,8 @@ function getPage () {
         console.error(error);
     })
 }
+
+const api = new Api();
 getPage();
 
 
@@ -80,7 +83,7 @@ function handleUpdateAvatarFormSubmit (evt) {
     evt.preventDefault();
     toggleSaveButtonText(buttonSaveAvatar, true);
 
-    fetchEditAvatar(avatarUrlInput.value)
+    api.fetchEditAvatar(avatarUrlInput.value)
     .then((data) => {
         avatarImage.src = avatarUrlInput.value;
         formElementUpdateAvatar.reset();
@@ -99,11 +102,10 @@ function handleUpdateAvatarFormSubmit (evt) {
 //функция сохранить (отправить) инфо профиля
 function handleProfileFormSubmit (evt) {
     evt.preventDefault();
-    // const form = evt.target;
     const button = evt.submitter;
     toggleSaveButtonText(button, true);
 
-    fetchEditProfileInfo({name: nameInput.value, about: jobInput.value})
+    api.fetchEditProfileInfo({name: nameInput.value, about: jobInput.value})
     .then((res) => {
         profileName.textContent = nameInput.value;
         profileDescription.textContent = jobInput.value;
@@ -138,7 +140,7 @@ function handleAddCardFormSubmit (evt, settings) {
     }
     toggleSaveButtonText(button, true);
 
-    fetchPostCard(item)
+    api.fetchPostCard(item)
     .then((res) => {
         const card = createCard(res);
         elementsContainer.prepend(card);
