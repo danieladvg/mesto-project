@@ -58,7 +58,7 @@ export class Api {
     }
 
 
-//отправить карточку на сервер
+    //отправить карточку на сервер
     fetchPostCard = (card) => {
     return this._request(`${this.baseUrl}/cards`, {
         method: 'POST',

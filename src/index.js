@@ -2,11 +2,12 @@ import './pages/index.css';
 
 import{enableValidation, handleSubmitButton} from './components/validate.js'
 import{openPopup, closePopup} from './components/modal.js';
-import{renderCards, createCard} from './components/card.js';
+// import{renderCards, createCard} from './components/card.js';
 // import{initialCards} from './components/cards.js'
 
 // import {fetchPostCard, fetchEditProfileInfo, fetchEditAvatar, fetchGetProfileInfo, fetchGetCards} from './components/api.js';
 import { Api } from './components/api';
+import { Card } from './components/card';
 import { toggleSaveButtonText } from './components/utils';
 
 export const sectionProfile = document.querySelector('.profile'); //секция profile
@@ -35,7 +36,7 @@ export const formElementAddCard = popupAddCard.querySelector('#cardFormPopup');/
 export const buttonCreateCard = popupAddCard.querySelector('#addCard-save-button'); //кнопка создать карточку
 
 export const elementsContainer = document.querySelector('.elements-container'); //контейнер для карточек
-export const cardTemplate = document.querySelector('#cardTemplate').content; //шаблон карточки
+// export const cardTemplate = document.querySelector('#cardTemplate').content; //шаблон карточки
 
 export const popupImagePreview = document.querySelector('.popup_type_image-preview');// модальное окно (увеличить изображение карточки)
 export const bigImageName = document.querySelector('.popup__image-name'); //название большого изображения
@@ -67,14 +68,16 @@ function getPage () {
         profileDescription.textContent = userData.about;
         avatarImage.src = userData.avatar;
         userId = userData._id;
-        renderCards(cards, userId)
+        card.renderCards(cards, userId);
     })
     .catch((error) => {
         console.error(error);
     })
 }
 
+
 const api = new Api();
+const card = new Card('.elements-container', '#cardTemplate');
 getPage();
 
 
@@ -142,8 +145,9 @@ function handleAddCardFormSubmit (evt, settings) {
 
     api.fetchPostCard(item)
     .then((res) => {
-        const card = createCard(res);
-        elementsContainer.prepend(card);
+        console.log(res);
+        const cardNew = card.createCard(res, userId);
+        elementsContainer.prepend(cardNew);
         formElementAddCard.reset();
         handleSubmitButton(buttonCreateCard);
         closePopup(popupAddCard);
