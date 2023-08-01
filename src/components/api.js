@@ -6,6 +6,8 @@ export const config = {
     }
 };
 
+
+
 //проверка ответа сервера на запрос
 const checkResponse = (res) => {
     if (!res.ok) {
