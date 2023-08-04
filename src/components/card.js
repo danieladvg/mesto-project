@@ -88,6 +88,7 @@ export class Card {
         return cardElement; 
     }
 }
+
 // //функция добавления карточек в DOM
 // export function renderCards (cards, userId) {
 //     cards.forEach((data) => {
