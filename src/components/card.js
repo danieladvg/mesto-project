@@ -14,15 +14,7 @@ export class Card {
         return likes.some(like => like._id === userId);
     }
 
-    //функция добавления карточки в DOM
-    renderCards (cards, userId) {
-        cards.forEach((data) => {
-        const cardNew = this.createCard(data, userId);
-        this.elementsContainer.prepend(cardNew);
-    })
-    }
-
-// функция создания карточки
+// функция создания карточки в DOM
     createCard(item, userId) {
 
         const cardElement = this.cardTemplate.cloneNode(true);
@@ -82,7 +74,6 @@ export class Card {
 
         //функция удаления карточки
         trashButton.addEventListener('click', (e) => {
-            console.log(this.cardId);
             api.fetchDeleteCard(this.cardId)
             .then((res) => {
                 e.target.closest('.card').remove();
@@ -92,8 +83,18 @@ export class Card {
 
         cardImage.addEventListener('click', () => openImagePreview(item));
 
+        this.elementsContainer.prepend(cardElement);
+
         return cardElement; 
     }
 }
+// //функция добавления карточек в DOM
+// export function renderCards (cards, userId) {
+//     cards.forEach((data) => {
+//     const cardNew = this.createCard(data, userId);
+//     this.elementsContainer.prepend(cardNew);
+// })
+// }
+
 
 const api = new Api();
