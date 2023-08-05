@@ -6,9 +6,10 @@ import{openPopup, closePopup} from './components/modal.js';
 // import{initialCards} from './components/cards.js'
 
 // import {fetchPostCard, fetchEditProfileInfo, fetchEditAvatar, fetchGetProfileInfo, fetchGetCards} from './components/api.js';
-import { Api } from './components/api';
-import { Card } from './components/card';
+import { Api } from './components/api.js';
+import { Card } from './components/card.js';
 import { toggleSaveButtonText } from './components/utils';
+// import { forEach } from 'core-js/core/array';
 
 export const sectionProfile = document.querySelector('.profile'); //секция profile
 export const profileName = sectionProfile.querySelector('.profile__name'); //имя профиля
@@ -68,7 +69,10 @@ function getPage () {
         profileDescription.textContent = userData.about;
         avatarImage.src = userData.avatar;
         userId = userData._id;
-        card.renderCards(cards, userId);
+        cards.forEach((data) => {
+            const cardNew = new Card('.elements-container', '#cardTemplate');
+            cardNew.createCard(data, userId);
+        });
     })
     .catch((error) => {
         console.error(error);
@@ -77,7 +81,7 @@ function getPage () {
 
 
 const api = new Api();
-const card = new Card('.elements-container', '#cardTemplate');
+// const card = new Card('.elements-container', '#cardTemplate');
 getPage();
 
 
@@ -145,9 +149,8 @@ function handleAddCardFormSubmit (evt, settings) {
 
     api.fetchPostCard(item)
     .then((res) => {
-        console.log(res);
-        const cardNew = card.createCard(res, userId);
-        elementsContainer.prepend(cardNew);
+        const cardNew = new Card('.elements-container', '#cardTemplate');
+        cardNew.createCard(res, userId);
         formElementAddCard.reset();
         handleSubmitButton(buttonCreateCard);
         closePopup(popupAddCard);
