@@ -1,4 +1,23 @@
-import { validationConfig} from '../index.js';
+import { validationConfig} from '../utils/constants.js';
+
+export class FormValidator {
+    constructor(validationConfig, form) {
+        this.formSelector = validationConfig.formSelector;
+        this.inputSelector = validationConfig.inputSelector;
+        this.submitButtonSelector = validationConfig.submitButtonSelector;
+        this.inactiveButtonClass = validationConfig.inactiveButtonClass;
+        this.inputErrorClass = validationConfig.inputErrorClass;
+        this.errorClass = validationConfig.errorClass;
+        this.form = form;
+        this.inputList = Array.from(this.form.querySelectorAll(this.inputSelector));
+        this.saveButton = this.form.querySelector(this.submitButtonSelector);
+    }
+
+    enableValidation() {
+        
+    }
+}
+
 
 //валидация форм
 const showInputError = (formElement, inputElement, errorMessage) => {
