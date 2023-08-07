@@ -1,5 +1,5 @@
 // import{elementsContainer, cardTemplate, userId} from '../index.js';
-import { Api } from './api.js';
+import { Api } from './Api.js';
 import{openImagePreview} from './modal.js';
 
 export class Card {
@@ -98,4 +98,10 @@ export class Card {
 // }
 
 
-const api = new Api();
+const api = new Api({
+    baseUrl: 'https://nomoreparties.co/v1/plus-cohort-26',
+    headers: {
+        authorization: 'd48850ee-0174-40ac-94a8-4573c8ed93c1',
+        'Content-Type': 'application/json'
+    }
+});

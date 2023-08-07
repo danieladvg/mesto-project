@@ -1,10 +1,6 @@
 export class Api {
-    constructor() {
-        this.baseUrl = 'https://nomoreparties.co/v1/plus-cohort-26';
-        this.headers = {
-            authorization: 'd48850ee-0174-40ac-94a8-4573c8ed93c1',
-            'Content-Type': 'application/json'
-        };
+    constructor(options) {
+        this.options = options;
     }
 
     //проверка ответа сервера на запрос
@@ -22,23 +18,23 @@ export class Api {
 
     //получение информации о пользователе
     fetchGetProfileInfo = () => {
-        return this._request(`${this.baseUrl}/users/me`, {
-            headers: this.headers
+        return this._request(`${this.options.baseUrl}/users/me`, {
+            headers: this.options.headers
         })
     }
 
     //получение списка карточек
     fetchGetCards = () => {
-        return this._request(`${this.baseUrl}/cards`, {
-            headers: this.headers
+        return this._request(`${this.options.baseUrl}/cards`, {
+            headers: this.options.headers
         })
     }
 
     //редактирование информации о пользователе
     fetchEditProfileInfo = (data) => {
-        return this._request(`${this.baseUrl}/users/me`, {
+        return this._request(`${this.options.baseUrl}/users/me`, {
         method: 'PATCH',
-        headers: this.headers,
+        headers: this.options.headers,
         body: JSON.stringify({
             name: data.name,
             about: data.about
@@ -48,9 +44,9 @@ export class Api {
 
     //редактирование аватара
     fetchEditAvatar = (url) => {
-    return this._request(`${this.baseUrl}/users/me/avatar`, {
+    return this._request(`${this.options.baseUrl}/users/me/avatar`, {
         method: 'PATCH',
-        headers: this.headers,
+        headers: this.options.headers,
         body: JSON.stringify({
             avatar: url
             })
@@ -60,9 +56,9 @@ export class Api {
 
     //отправить карточку на сервер
     fetchPostCard = (card) => {
-    return this._request(`${this.baseUrl}/cards`, {
+    return this._request(`${this.options.baseUrl}/cards`, {
         method: 'POST',
-        headers: this.headers,
+        headers: this.options.headers,
         body: JSON.stringify({
             name: card.name,
             link: card.link
@@ -72,27 +68,27 @@ export class Api {
 
     //удаление карточки
     fetchDeleteCard = (cardId) => {
-    return this._request(`${this.baseUrl}/cards/${cardId}`, {
+    return this._request(`${this.options.baseUrl}/cards/${cardId}`, {
         method: 'DELETE',
-        headers: this.headers
+        headers: this.options.headers
         })
     }
 
 
     //постановка лайка карточки
     fetchLikeCard = (cardId) => {
-    return this._request(`${this.baseUrl}/cards/likes/${cardId}`, {
+    return this._request(`${this.options.baseUrl}/cards/likes/${cardId}`, {
         method: 'PUT',
-        headers: this.headers,
+        headers: this.options.headers,
         })
     }
 
 
     //удаление лайка карточки
     fetchUnlikeCard = (cardId) => {
-    return this._request(`${this.baseUrl}/cards/likes/${cardId}`, {
+    return this._request(`${this.options.baseUrl}/cards/likes/${cardId}`, {
         method: 'DELETE',
-        headers: this.headers
+        headers: this.options.headers
         })
     }
 
