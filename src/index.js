@@ -63,8 +63,9 @@ function getPage () {
         avatarImage.src = userData.avatar;
         userId = userData._id;
         cards.forEach((data) => {
-            const cardNew = new Card('.elements-container', '#cardTemplate');
-            cardNew.createCard(data, userId);
+            const cardNew = new Card(data, userId, '#cardTemplate');
+            const cardElement = cardNew.generate();
+            document.querySelector('.elements-container').prepend(cardElement);
         });
     })
     .catch((error) => {
