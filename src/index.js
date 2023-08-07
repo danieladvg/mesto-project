@@ -6,16 +6,16 @@ import {sectionProfile,
     profileEditButton,
     avatarImage,
     avatarEditButton,
-    popupUpdateAvatar,
+    // popupUpdateAvatar,
     formElementUpdateAvatar,
     avatarUrlInput,
     buttonSaveAvatar,
-    popupEditProfile,
+    // popupEditProfile,
     formElementEditProfile,
     nameInput,
     jobInput,
     buttonSaveProfileInfo,
-    popupAddCard,
+    // popupAddCard,
     buttonAddCard,
     cardNameInput,
     cardUrlInput,
@@ -23,7 +23,7 @@ import {sectionProfile,
     buttonCreateCard,
     elementsContainer,
     cardTemplate,
-    popupImagePreview,
+    // popupImagePreview,
     bigImageName,
     imageUrl,
     formElement,
@@ -39,7 +39,7 @@ import{openPopup, closePopup} from './components/modal.js';
 
 // import {fetchPostCard, fetchEditProfileInfo, fetchEditAvatar, fetchGetProfileInfo, fetchGetCards} from './components/api.js';
 import { Api } from './components/Api.js';
-import { Card } from './components/Card.js';
+import { Card } from './components/card.js';
 import { Section } from './components/Section.js';
 import { Popup } from './components/Popup.js';
 import { PopupWithImage } from './components/PopupWithImage.js';
@@ -50,7 +50,7 @@ import { FormValidator } from './components/FormValidator';
 import { toggleSaveButtonText } from './components/utils';
 // import { forEach } from 'core-js/core/array';
 
-// let userId;
+let userId;
 
 //получение страницы (данные пользователя + карточки)
 function getPage () {
@@ -61,11 +61,11 @@ function getPage () {
         profileName.textContent = userData.name;
         profileDescription.textContent = userData.about;
         avatarImage.src = userData.avatar;
-        // userId = userData._id;
+        userId = userData._id;
         const cardList = new Section({
             items: cards, 
             renderer: (card) => {
-                const cardNew = new Card(card, userData._id, '#cardTemplate');
+                const cardNew = new Card(card, userId, '#cardTemplate', openImagePreview);
                 const element = cardNew.generate();
                 cardList.addItem(element);
             }
@@ -88,47 +88,54 @@ const api = new Api({
 });
 
 getPage();
+const popupUpdateAvatar = new PopupWithForm('.popup_type_update-avatar', handleUpdateAvatarFormSubmit);
+const popupEditProfile = new PopupWithForm('.popup_type_editProfile', handleProfileFormSubmit);
+const popupAddCard = new PopupWithForm('.popup_type_addCard', handleAddCardFormSubmit);
+const popupImagePreview = new PopupWithImage('.popup_type_image-preview');
 
 //функция сохранить (отправить) обновленный аватар
-function handleUpdateAvatarFormSubmit (evt) {
-    evt.preventDefault();
-    toggleSaveButtonText(buttonSaveAvatar, true);
+function handleUpdateAvatarFormSubmit (formValues) {
+    // evt.preventDefault();
+    // toggleSaveButtonText(buttonSaveAvatar, true);
 
-    api.fetchEditAvatar(avatarUrlInput.value)
+    api.fetchEditAvatar(formValues['update-avatar'])
     .then((data) => {
-        avatarImage.src = avatarUrlInput.value;
-        formElementUpdateAvatar.reset();
-        handleSubmitButton(buttonSaveAvatar);
-        closePopup(popupUpdateAvatar);
+        avatarImage.src = data.avatar;
+        // avatarImage.src = avatarUrlInput.value;
+        // formElementUpdateAvatar.reset();
+        // handleSubmitButton(buttonSaveAvatar);
+        // closePopup(popupUpdateAvatar);
+        popupUpdateAvatar.close();
     })
     .catch((error) => {
         console.error(error);
     })
-    .finally(() => {
-        toggleSaveButtonText(buttonSaveAvatar, false);
-    })
+    // .finally(() => {
+    //     toggleSaveButtonText(buttonSaveAvatar, false);
+    // })
     
 };
 
 //функция сохранить (отправить) инфо профиля
-function handleProfileFormSubmit (evt) {
-    evt.preventDefault();
-    const button = evt.submitter;
-    toggleSaveButtonText(button, true);
+function handleProfileFormSubmit (formValues) {
+    // evt.preventDefault();
+    // const button = evt.submitter;
+    // toggleSaveButtonText(button, true);
 
-    api.fetchEditProfileInfo({name: nameInput.value, about: jobInput.value})
+    api.fetchEditProfileInfo({name: formValues['profile-name'], about: formValues['profile-description']})
     .then((res) => {
-        profileName.textContent = nameInput.value;
-        profileDescription.textContent = jobInput.value;
-        handleSubmitButton(buttonSaveProfileInfo);
-        closePopup(popupEditProfile);
+        profileName.textContent = formValues['profile-name'];
+        profileDescription.textContent = formValues['profile-description'];
+        // handleSubmitButton(buttonSaveProfileInfo);
+        // closePopup(popupEditProfile);
+        popupEditProfile.close();
     })
     .catch((error) => {
         console.error(error);
     })
-    .finally(() => {
-        toggleSaveButtonText(button, false);
-    })
+    // .finally(() => {
+    //     toggleSaveButtonText(buttonSaveProfileInfo, false);
+    // })
 };
 
 // initialCards.forEach(function(item) {
@@ -136,63 +143,83 @@ function handleProfileFormSubmit (evt) {
 // });
 
 //добавление новой карточки 
-function handleAddCardFormSubmit (evt, settings) {
-    evt.preventDefault();
-    const button = evt.submitter;
-    const cardName = cardNameInput.value;
-    const cardUrl = cardUrlInput.value;
+function handleAddCardFormSubmit (formValues) {
+    // evt.preventDefault();
+    // const button = evt.submitter;
+
     const item = {
-        name: cardName,
-        link: cardUrl,
+        name: formValues['card-name'],
+        link: formValues['card-url'],
         owner: {
             _id: userId
         },
         likes: []
     }
-    toggleSaveButtonText(button, true);
+    // toggleSaveButtonText(button, true);
 
     api.fetchPostCard(item)
     .then((res) => {
-        const cardNew = new Card('.elements-container', '#cardTemplate');
-        cardNew.createCard(res, userId);
-        formElementAddCard.reset();
-        handleSubmitButton(buttonCreateCard);
-        closePopup(popupAddCard);
+        const cardList = new Section({
+            items: [res], 
+            renderer: (card) => {
+                const cardNew = new Card(card, userId, '#cardTemplate', openImagePreview);
+                const element = cardNew.generate();
+                cardList.addItem(element);
+            }
+            }
+            , '.elements-container');
+        cardList.renderItems();
+        // handleSubmitButton(buttonCreateCard);
+        // closePopup(popupAddCard);
+        popupAddCard.close();    
         })
     .catch((error) => {
         console.error(error);
     })
-    .finally(() => {
-        toggleSaveButtonText(button, false);
-    })
+    // .finally(() => {
+    //     toggleSaveButtonText(button, false);
+    // })
+}
+
+function openImagePreview(data) {
+    popupImagePreview.open(data);
+
+    // bigImageName.textContent = data.name;
+    // imageUrl.src = data.link;
+    // imageUrl.alt = data.name;
+    
+    // openPopup(popupImagePreview);
 }
 
 
 //открытие модального окна (редактировать профиль)
 profileEditButton.addEventListener('click', function () {
-    openPopup(popupEditProfile);
+    // openPopup(popupEditProfile);
+    popupEditProfile.open();
     nameInput.value = profileName.textContent;
     jobInput.value = profileDescription.textContent;
 });
 
 //открытие модального окна (обновить аватар)
 avatarEditButton.addEventListener('click', function () {
-    openPopup(popupUpdateAvatar);
+    // openPopup(popupUpdateAvatar);
+    popupUpdateAvatar.open();
 });
 
 //открытие модального окна (добавить карточку)
 buttonAddCard.addEventListener('click', function () {
-    openPopup(popupAddCard);
+    // openPopup(popupAddCard);
+    popupAddCard.open();
 }) 
 
 //слушатель на форме редактировать профиль
-formElementEditProfile.addEventListener('submit', handleProfileFormSubmit);
+// formElementEditProfile.addEventListener('submit', handleProfileFormSubmit);
 
 //слушатель на форме добавления карточки
-formElementAddCard.addEventListener('submit', handleAddCardFormSubmit);
+// formElementAddCard.addEventListener('submit', handleAddCardFormSubmit);
 
 //слушатель на форме обновления аватара
-formElementUpdateAvatar.addEventListener('submit', handleUpdateAvatarFormSubmit);
+// formElementUpdateAvatar.addEventListener('submit', handleUpdateAvatarFormSubmit);
 
 //вызов функции валидации форм
 enableValidation(validationConfig);
