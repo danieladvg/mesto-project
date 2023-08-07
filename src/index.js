@@ -50,7 +50,7 @@ import { FormValidator } from './components/FormValidator';
 import { toggleSaveButtonText } from './components/utils';
 // import { forEach } from 'core-js/core/array';
 
-let userId;
+// let userId;
 
 //получение страницы (данные пользователя + карточки)
 function getPage () {
@@ -61,12 +61,17 @@ function getPage () {
         profileName.textContent = userData.name;
         profileDescription.textContent = userData.about;
         avatarImage.src = userData.avatar;
-        userId = userData._id;
-        cards.forEach((data) => {
-            const cardNew = new Card(data, userId, '#cardTemplate', );
-            const cardElement = cardNew.generate();
-            document.querySelector('.elements-container').prepend(cardElement);
-        });
+        // userId = userData._id;
+        const cardList = new Section({
+            items: cards, 
+            renderer: (card) => {
+                const cardNew = new Card(card, userData._id, '#cardTemplate');
+                const element = cardNew.generate();
+                cardList.addItem(element);
+            }
+            }
+            , '.elements-container');
+        cardList.renderItems();
     })
     .catch((error) => {
         console.error(error);
@@ -81,9 +86,8 @@ const api = new Api({
         'Content-Type': 'application/json'
     }
 });
-// const card = new Card('.elements-container', '#cardTemplate');
-getPage();
 
+getPage();
 
 //функция сохранить (отправить) обновленный аватар
 function handleUpdateAvatarFormSubmit (evt) {
