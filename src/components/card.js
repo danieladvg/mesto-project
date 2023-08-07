@@ -1,9 +1,7 @@
 import { Api } from './Api.js';
-import{openImagePreview} from './modal.js';
-import { PopupWithImage } from './PopupWithImage.js';
 
 export class Card {
-    constructor(item, userId, cardTemplate){
+    constructor(item, userId, cardTemplate, handleCardClick){
         this._cardId = item._id;
         this._title = item.name;
         this._image = item.link;
@@ -11,6 +9,7 @@ export class Card {
         this._cardTemplate = cardTemplate;
         this._userId = userId;
         this._ownerId = item.owner._id;
+        this._handleCardClick = handleCardClick;
     }
 
     // создание экземпляра карточки
@@ -62,11 +61,6 @@ export class Card {
             .catch((err) => console.log(err)); 
     }
 
-    _handleCardClick() {
-        const popupImage = new PopupWithImage(this._element);
-        popupImage.open();
-    }
-
 //проверить, есть ли мой лайк в массиве с лайками
     _checkOwnerLike () {
         return this._likes.some(like => like._id === this._userId);
@@ -109,15 +103,6 @@ export class Card {
     }
 
 }
-
-// //функция добавления карточек в DOM
-// export function renderCards (cards, userId) {
-//     cards.forEach((data) => {
-//     const cardNew = this.createCard(data, userId);
-//     this.elementsContainer.prepend(cardNew);
-// })
-// }
-
 
 const api = new Api({
     baseUrl: 'https://nomoreparties.co/v1/plus-cohort-26',
