@@ -32,7 +32,7 @@ export class Card {
             this._handleTrashButton(e);
         });
 
-        this._image.addEventListener('click', () => {
+        this._imageContainer.addEventListener('click', () => {
             this._handleCardClick(this._getCardData());
         });
     }
@@ -83,26 +83,23 @@ export class Card {
     }
 
     _getCardData() {
-        console.log('_getCardData');
         const cardData = {name: this._title, link: this._image};
         return cardData;
     }
 
     // заполнение карточки данными
     generate() {
-        console.log('this._setEventListeners');
-
         this._element = this._getElement();
         this._cardLikeButton = this._element.querySelector('.card__like-button');
         this._trashButton = this._element.querySelector('.card__delete-button');
         this._likeCounter = this._element.querySelector('.card__like-counter');
-        this._image = this._element.querySelector('.card__image');
+        this._imageContainer = this._element.querySelector('.card__image');
         this._setEventListeners();
 
         this._element.dataset.id = this._cardId;
         this._element.querySelector('.card__title').textContent = this._title;
-        this._image.src = this._image;
-        this._image.alt = this._title;
+        this._element.querySelector('.card__image').src = this._image;
+        this._element.querySelector('.card__image').alt = this._title;
 
         this._setLikeButtonState();
 

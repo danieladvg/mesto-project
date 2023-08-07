@@ -33,7 +33,7 @@ import {sectionProfile,
 } from './utils/constants.js';
 
 import{enableValidation, handleSubmitButton} from './components/FormValidator.js'
-import{openPopup, closePopup} from './components/modal.js';
+// import{openPopup, closePopup} from './components/modal.js';
 // import{renderCards, createCard} from './components/card.js';
 // import{initialCards} from './components/cards.js'
 
@@ -47,7 +47,7 @@ import { PopupWithForm } from './components/PopupWithForm.js';
 import { UserInfo } from './components/UserInfo';
 import { FormValidator } from './components/FormValidator';
 
-import { toggleSaveButtonText } from './components/utils';
+// import { toggleSaveButtonText } from './components/utils';
 // import { forEach } from 'core-js/core/array';
 
 let userId;
