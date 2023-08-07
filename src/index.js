@@ -63,7 +63,7 @@ function getPage () {
         avatarImage.src = userData.avatar;
         userId = userData._id;
         cards.forEach((data) => {
-            const cardNew = new Card(data, userId, '#cardTemplate');
+            const cardNew = new Card(data, userId, '#cardTemplate', );
             const cardElement = cardNew.generate();
             document.querySelector('.elements-container').prepend(cardElement);
         });
