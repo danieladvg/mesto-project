@@ -130,8 +130,11 @@ function handleProfileFormSubmit (formValues) {
 
     api.fetchEditProfileInfo({name: formValues['profile-name'], about: formValues['profile-description']})
     .then((res) => {
+        // userInfo.setUserInfo(formValues);
+
         profileName.textContent = formValues['profile-name'];
         profileDescription.textContent = formValues['profile-description'];
+
         // handleSubmitButton(buttonSaveProfileInfo);
         // closePopup(popupEditProfile);
         popupEditProfile.close();
@@ -202,8 +205,9 @@ function openImagePreview(data) {
 profileEditButton.addEventListener('click', function () {
     // openPopup(popupEditProfile);
     popupEditProfile.open();
-    nameInput.value = profileName.textContent;
-    jobInput.value = profileDescription.textContent;
+    const {name, about} = userInfo.getUserInfo();
+    nameInput.value = name;
+    jobInput.value = about;
 });
 
 //открытие модального окна (обновить аватар)
