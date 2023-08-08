@@ -1,7 +1,5 @@
-import { Api } from './Api.js';
-
 export class Card {
-    constructor(item, userId, cardTemplate, handleCardClick){
+    constructor(item, userId, cardTemplate, handleCardClick, handleLikeButton, handleTrashButton){
         this._cardId = item._id;
         this._title = item.name;
         this._image = item.link;
@@ -10,6 +8,8 @@ export class Card {
         this._userId = userId;
         this._ownerId = item.owner._id;
         this._handleCardClick = handleCardClick;
+        this._handleLikeButton = handleLikeButton;
+        this._handleTrashButton = handleTrashButton;
     }
 
     // создание экземпляра карточки
@@ -25,42 +25,25 @@ export class Card {
     // добавляем слушатели событий
     _setEventListeners() {
         this._cardLikeButton.addEventListener('click', () => {
-            this._handleLikeButton();
+            Promise.all([this._handleLikeButton(this._cardId, this._checkOwnerLike())])
+            .then(([res]) => {
+                this._likes = res.likes.slice();
+                this._setLikeButtonState();
+            })
+            .catch((err) => console.log(err));
         });
-
+ 
         this._trashButton.addEventListener('click', (e) => {
-            this._handleTrashButton(e);
+            Promise.all([this._handleTrashButton(this._cardId)])
+            .then (([res]) => {
+                e.target.closest('.card').remove();
+            })
+            .catch((err) => console.log(err));
         });
 
         this._imageContainer.addEventListener('click', () => {
             this._handleCardClick(this._getCardData());
         });
-    }
-
-    _handleLikeButton() {
-        if (this._checkOwnerLike()) {
-            api.fetchUnlikeCard(this._cardId)
-            .then((res) => {
-                this._likes = res.likes.slice();
-                this._setLikeButtonState();
-            })
-            .catch((err) => console.log(err));
-        } else {
-            api.fetchLikeCard(this._cardId)
-            .then((res) => {
-                this._likes = res.likes.slice();
-                this._setLikeButtonState();
-            })
-            .catch((err) => console.log(err));
-        }
-    }
-
-    _handleTrashButton(e) {
-        api.fetchDeleteCard(this._cardId)
-            .then((res) => {
-                e.target.closest('.card').remove();
-            })
-            .catch((err) => console.log(err)); 
     }
 
 //проверить, есть ли мой лайк в массиве с лайками
@@ -109,14 +92,4 @@ export class Card {
 
         return this._element;
     }
-
 }
-
-const api = new Api({
-    baseUrl: 'https://nomoreparties.co/v1/plus-cohort-26',
-    headers: {
-        authorization: 'd48850ee-0174-40ac-94a8-4573c8ed93c1',
-        'Content-Type': 'application/json'
-    }
-});
-

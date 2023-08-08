@@ -69,7 +69,7 @@ function getPage () {
         const cardList = new Section({
             items: cards, 
             renderer: (card) => {
-                const cardNew = new Card(card, userId, '#cardTemplate', openImagePreview);
+                const cardNew = new Card(card, userId, '#cardTemplate', openImagePreview, likeCard, deleteCard);
                 const element = cardNew.generate();
                 cardList.addItem(element);
             }
@@ -92,12 +92,29 @@ const api = new Api({
 
 getPage();
 
+
 const userInfo = new UserInfo(profileName, profileDescription);
 
 const popupUpdateAvatar = new PopupWithForm('.popup_type_update-avatar', handleUpdateAvatarFormSubmit);
 const popupEditProfile = new PopupWithForm('.popup_type_editProfile', handleProfileFormSubmit);
 const popupAddCard = new PopupWithForm('.popup_type_addCard', handleAddCardFormSubmit);
 const popupImagePreview = new PopupWithImage('.popup_type_image-preview');
+
+function likeCard(cardId, isUnlike) {
+    let result;
+    if (isUnlike) {
+        result = api.fetchUnlikeCard(cardId);
+    } else {   
+        result = api.fetchLikeCard(cardId);
+    }
+    return result;
+}
+
+function deleteCard(cardId) {
+    let result;
+    result = api.fetchDeleteCard(this._cardId);
+    return result;
+}
 
 //функция сохранить (отправить) обновленный аватар
 function handleUpdateAvatarFormSubmit (formValues) {
@@ -168,7 +185,7 @@ function handleAddCardFormSubmit (formValues) {
         const cardList = new Section({
             items: [res], 
             renderer: (card) => {
-                const cardNew = new Card(card, userId, '#cardTemplate', openImagePreview);
+                const cardNew = new Card(card, userId, '#cardTemplate', {openImagePreview, likeCard, deleteCard});
                 const element = cardNew.generate();
                 cardList.addItem(element);
             }

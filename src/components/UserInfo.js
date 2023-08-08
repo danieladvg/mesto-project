@@ -1,5 +1,5 @@
 export class UserInfo {
-    constructor({profileName, profileDescription}) {
+    constructor(profileName, profileDescription) {
         this._profileName = profileName;
         this._profileDescription = profileDescription;
     }
