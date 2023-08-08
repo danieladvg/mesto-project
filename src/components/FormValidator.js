@@ -1,5 +1,3 @@
-import { validationConfig} from '../utils/constants.js';
-
 export class FormValidator {
     constructor(validationConfig, form) {
         this._formSelector = validationConfig.formSelector;
@@ -13,8 +11,6 @@ export class FormValidator {
     }
 
     _setEventListeners() {
-        // const buttonElement = this._form.querySelector(this._submitButtonSelector); //элемент кнопки submit
-        // const inputList = Array.from(this._form.querySelectorAll(this._inputSelector));
         this._inputList.forEach((inputElement) => {
             inputElement.addEventListener('input', () => {
                 this._checkInputValidity(inputElement);
@@ -70,77 +66,3 @@ export class FormValidator {
         this._setEventListeners();
     }
 }
-
-
-
-
-
-//валидация форм
-const showInputError = (formElement, inputElement, errorMessage) => {
-    const inputError = formElement.querySelector(`.${inputElement.id}-error`);
-    inputElement.classList.add(validationConfig.inputErrorClass);
-    inputError.textContent = errorMessage;
-    inputError.classList.add(validationConfig.errorClass);
-}
-
-const hideInputError = (formElement, inputElement) => {
-    const inputError = formElement.querySelector(`.${inputElement.id}-error`);
-    inputElement.classList.remove(validationConfig.inputErrorClass);
-    inputError.classList.remove(validationConfig.errorClass);
-    inputError.textContent = '';
-}
-
-const checkInputValidity = (formElement, inputElement) => {
-    if(inputElement.validity.patternMismatch) {
-        inputElement.setCustomValidity(inputElement.dataset.errorMessage);
-    } else {
-        inputElement.setCustomValidity("");
-    }
-
-    if (!inputElement.validity.valid) {
-        showInputError(formElement, inputElement, inputElement.validationMessage);
-    } else {
-        hideInputError(formElement, inputElement);
-    }
-}
-
-const hasInvalidInput = (inputList) => {
-    return inputList.some((inputElement) => {
-        return !inputElement.validity.valid;
-    })
-}
-
-export const toggleButtonState = (inputList, buttonElement) => {
-    if(hasInvalidInput(inputList)) {
-        buttonElement.disabled = true;
-        buttonElement.classList.add(validationConfig.inactiveButtonClass);
-    } else {
-        buttonElement.disabled = false;
-        buttonElement.classList.remove(validationConfig.inactiveButtonClass);
-    }
-}
-
-export const handleSubmitButton = (buttonElement) => {
-    buttonElement.disabled = true;
-    buttonElement.classList.add(validationConfig.inactiveButtonClass);
-};
-
-const setEventListeners = (formElement) => {
-    const buttonElement = formElement.querySelector(validationConfig.submitButtonSelector); //элемент кнопки submit
-    const inputList = Array.from(formElement.querySelectorAll(validationConfig.inputSelector));
-    inputList.forEach((inputElement) => {
-        inputElement.addEventListener('input', () => {
-            checkInputValidity(formElement, inputElement);
-            toggleButtonState(inputList, buttonElement);
-        })
-    })
-}
-
-const enableValidation = (validationConfig) => {
-    const formList = Array.from(document.querySelectorAll(validationConfig.formSelector));
-    formList.forEach((formElement => {
-        setEventListeners(formElement, validationConfig)
-    }));
-};
-
-export{enableValidation};

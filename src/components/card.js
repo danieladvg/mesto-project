@@ -32,7 +32,7 @@ export class Card {
             })
             .catch((err) => console.log(err));
         });
- 
+
         this._trashButton.addEventListener('click', (e) => {
             Promise.all([this._handleTrashButton(this._cardId)])
             .then (([res]) => {
@@ -45,8 +45,7 @@ export class Card {
             this._handleCardClick(this._getCardData());
         });
     }
-
-//проверить, есть ли мой лайк в массиве с лайками
+    //проверить, есть ли мой лайк в массиве с лайками
     _checkOwnerLike () {
         return this._likes.some(like => like._id === this._userId);
     }
