@@ -32,7 +32,7 @@ export class Popup {
         document.querySelectorAll('.popup__close-button').forEach(button => {
             const closeButtonsPopup = button.closest('.popup');
             button.addEventListener('click', () => this.close());
-            closeButtonsPopup.addEventListener('click', e => this._closePopupByOverlay(e));
+            closeButtonsPopup.addEventListener('mousedown', e => this._closePopupByOverlay(e));
             }); 
         document.addEventListener('keydown', this._handleEscClose);
     }

@@ -1,7 +1,8 @@
 export class UserInfo {
-    constructor(profileName, profileDescription) {
+    constructor(profileName, profileDescription, editProfileInfo) {
         this._profileName = profileName;
         this._profileDescription = profileDescription;
+        this._editProfileInfo = editProfileInfo;
     }
 
     getUserInfo() {
@@ -12,7 +13,11 @@ export class UserInfo {
     }
 
     setUserInfo(data) {
-        this._profileName.textContent = data.profileName;
-        this._profileDescription.textContent = data.profileDescription;
+        Promise.all([this._editProfileInfo(data)])
+            .then(([res]) => {
+                this._profileName.textContent = res.name;
+                this._profileDescription.textContent = res.about;
+            })
+            .catch((err) => console.log(err));
     }
 }
