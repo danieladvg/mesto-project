@@ -58,8 +58,12 @@ function getPage () {
     const cards = api.fetchGetCards();
     Promise.all([profileInfo, cards])
     .then(([userData, cards]) => {
-        profileName.textContent = userData.name;
-        profileDescription.textContent = userData.about;
+        userInfo.setUserInfo({
+            profileName: userData.name,
+            profileDescription: userData.about
+        })
+        // profileName.textContent = userData.name;
+        // profileDescription.textContent = userData.about;
         avatarImage.src = userData.avatar;
         userId = userData._id;
         const cardList = new Section({
@@ -69,8 +73,7 @@ function getPage () {
                 const element = cardNew.generate();
                 cardList.addItem(element);
             }
-            }
-            , '.elements-container');
+            }, '.elements-container');
         cardList.renderItems();
     })
     .catch((error) => {
@@ -88,6 +91,9 @@ const api = new Api({
 });
 
 getPage();
+
+const userInfo = new UserInfo(profileName, profileDescription);
+
 const popupUpdateAvatar = new PopupWithForm('.popup_type_update-avatar', handleUpdateAvatarFormSubmit);
 const popupEditProfile = new PopupWithForm('.popup_type_editProfile', handleProfileFormSubmit);
 const popupAddCard = new PopupWithForm('.popup_type_addCard', handleAddCardFormSubmit);
@@ -210,7 +216,19 @@ avatarEditButton.addEventListener('click', function () {
 buttonAddCard.addEventListener('click', function () {
     // openPopup(popupAddCard);
     popupAddCard.open();
-}) 
+})
+
+
+const updateAvatarValidator = new FormValidator(validationConfig, formElementUpdateAvatar);
+updateAvatarValidator.enableValidation();
+
+// const editProfileValidator = new FormValidator(validationConfig, formElementEditProfile);
+// editProfileValidator.enableValidation();
+
+// const addCardValidator = new FormValidator(validationConfig, formElementAddCard);
+// addCardValidator.enableValidation();
+
+
 
 //слушатель на форме редактировать профиль
 // formElementEditProfile.addEventListener('submit', handleProfileFormSubmit);
@@ -222,4 +240,4 @@ buttonAddCard.addEventListener('click', function () {
 // formElementUpdateAvatar.addEventListener('submit', handleUpdateAvatarFormSubmit);
 
 //вызов функции валидации форм
-enableValidation(validationConfig);
+// enableValidation(validationConfig);
