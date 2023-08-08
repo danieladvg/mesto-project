@@ -1,4 +1,4 @@
-import{bigImageName, imageUrl, popupImagePreview} from '../index.js';
+import{bigImageName, imageUrl, popupImagePreview} from '../utils/constants.js';
 
 //открытие модального окна
 function openPopup(popup) {
