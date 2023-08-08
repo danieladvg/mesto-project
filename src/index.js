@@ -16,7 +16,7 @@ import {
 } from './utils/constants.js';
 
 import { Api } from './components/Api.js';
-import { Card } from './components/card.js';
+import { Card } from './components/Card.js';
 import { Section } from './components/Section.js';
 import { PopupWithImage } from './components/PopupWithImage.js';
 import { PopupWithForm } from './components/PopupWithForm.js';
@@ -36,6 +36,7 @@ function getPage () {
             name: userData.name,
             about: userData.about
         })
+        // userInfo.setAvatar(userData.avatar);
         avatarImage.src = userData.avatar;
         userId = userData._id;
         createCards(cards);
@@ -57,7 +58,7 @@ const api = new Api({
 getPage();
 
 
-const userInfo = new UserInfo(profileName, profileDescription, editProfileInfo);
+const userInfo = new UserInfo(profileName, profileDescription, editProfileInfo, avatarImage);
 
 const popupUpdateAvatar = new PopupWithForm('.popup_type_update-avatar', handleUpdateAvatarFormSubmit);
 const popupEditProfile = new PopupWithForm('.popup_type_editProfile', handleProfileFormSubmit);
@@ -96,6 +97,7 @@ function deleteCard(cardId) {
 function handleUpdateAvatarFormSubmit (formValues) {
     api.fetchEditAvatar(formValues['update-avatar'])
     .then((data) => {
+        // userInfo.setAvatar(res);
         avatarImage.src = data.avatar;
         popupUpdateAvatar.close();
     })
@@ -143,7 +145,6 @@ function openImagePreview(data) {
 
 //открытие модального окна (редактировать профиль)
 profileEditButton.addEventListener('click', function () {
-    // openPopup(popupEditProfile);
     popupEditProfile.open();
     const {name, about} = userInfo.getUserInfo();
     nameInput.value = name;

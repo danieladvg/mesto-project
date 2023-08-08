@@ -1,7 +1,8 @@
 export class UserInfo {
-    constructor(profileName, profileDescription, editProfileInfo) {
+    constructor(profileName, profileDescription, editProfileInfo, avatarImage) {
         this._profileName = profileName;
         this._profileDescription = profileDescription;
+        // this._avatarImage = avatarImage;
         this._editProfileInfo = editProfileInfo;
     }
 
@@ -20,4 +21,8 @@ export class UserInfo {
             })
             .catch((err) => console.log(err));
     }
+
+    // setAvatar(data) {
+    //     this._avatarImage.src = res.avatar;
+    // }
 }

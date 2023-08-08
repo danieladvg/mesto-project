@@ -7,6 +7,7 @@ export class Popup {
 
     open() {
         this._popup.classList.add('popup_opened');
+        document.addEventListener('keydown', this._handleEscClose);
         this.setEventListeners();
     }
 
@@ -34,6 +35,14 @@ export class Popup {
             button.addEventListener('click', () => this.close());
             closeButtonsPopup.addEventListener('mousedown', e => this._closePopupByOverlay(e));
             }); 
-        document.addEventListener('keydown', this._handleEscClose);
+
+        // this._popup.addEventListener('mousedown', (evt) => {
+        //     if (evt.target.classList.contains('popup__close-button')) {
+        //         this.close();
+        //     }
+        //     if(evt.target.classList.contains('popup__opened')) {
+        //         this.close();
+        //     }
+        // })
     }
 }
