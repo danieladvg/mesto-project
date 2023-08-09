@@ -1,7 +1,9 @@
 import { Api } from './Api.js';
+import{openImagePreview} from './modal.js';
+import { PopupWithImage } from './PopupWithImage.js';
 
 export class Card {
-    constructor(item, userId, cardTemplate, handleCardClick){
+    constructor(item, userId, cardTemplate){
         this._cardId = item._id;
         this._title = item.name;
         this._image = item.link;
@@ -9,7 +11,6 @@ export class Card {
         this._cardTemplate = cardTemplate;
         this._userId = userId;
         this._ownerId = item.owner._id;
-        this._handleCardClick = handleCardClick;
     }
 
     // создание экземпляра карточки
@@ -137,6 +138,15 @@ function createCard(item, userId) {
             return true;
     }
 }
+
+// //функция добавления карточек в DOM
+// export function renderCards (cards, userId) {
+//     cards.forEach((data) => {
+//     const cardNew = this.createCard(data, userId);
+//     this.elementsContainer.prepend(cardNew);
+// })
+// }
+
 
 // //функция добавления карточек в DOM
 // export function renderCards (cards, userId) {
