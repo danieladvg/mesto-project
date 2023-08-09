@@ -6,16 +6,16 @@ import {sectionProfile,
     profileEditButton,
     avatarImage,
     avatarEditButton,
-    // popupUpdateAvatar,
+    popupUpdateAvatar,
     formElementUpdateAvatar,
     avatarUrlInput,
     buttonSaveAvatar,
-    // popupEditProfile,
+    popupEditProfile,
     formElementEditProfile,
     nameInput,
     jobInput,
     buttonSaveProfileInfo,
-    // popupAddCard,
+    popupAddCard,
     buttonAddCard,
     cardNameInput,
     cardUrlInput,
@@ -23,7 +23,7 @@ import {sectionProfile,
     buttonCreateCard,
     elementsContainer,
     cardTemplate,
-    // popupImagePreview,
+    popupImagePreview,
     bigImageName,
     imageUrl,
     formElement,
@@ -39,7 +39,7 @@ import{openPopup, closePopup} from './components/modal.js';
 
 // import {fetchPostCard, fetchEditProfileInfo, fetchEditAvatar, fetchGetProfileInfo, fetchGetCards} from './components/api.js';
 import { Api } from './components/Api.js';
-import { Card } from './components/card.js';
+import { Card } from './components/Card.js';
 import { Section } from './components/Section.js';
 import { Popup } from './components/Popup.js';
 import { PopupWithImage } from './components/PopupWithImage.js';
@@ -50,7 +50,7 @@ import { FormValidator } from './components/FormValidator';
 import { toggleSaveButtonText } from './components/utils';
 // import { forEach } from 'core-js/core/array';
 
-let userId;
+// let userId;
 
 //получение страницы (данные пользователя + карточки)
 function getPage () {
@@ -65,7 +65,7 @@ function getPage () {
         const cardList = new Section({
             items: cards, 
             renderer: (card) => {
-                const cardNew = new Card(card, userId, '#cardTemplate', openImagePreview);
+                const cardNew = new Card(card, userData._id, '#cardTemplate');
                 const element = cardNew.generate();
                 cardList.addItem(element);
             }
@@ -81,17 +81,13 @@ function getPage () {
 const api = new Api();
 const card = new Card('.elements-container', '#cardTemplate');
 getPage();
-const popupUpdateAvatar = new PopupWithForm('.popup_type_update-avatar', handleUpdateAvatarFormSubmit);
-const popupEditProfile = new PopupWithForm('.popup_type_editProfile', handleProfileFormSubmit);
-const popupAddCard = new PopupWithForm('.popup_type_addCard', handleAddCardFormSubmit);
-const popupImagePreview = new PopupWithImage('.popup_type_image-preview');
 
 //функция сохранить (отправить) обновленный аватар
 function handleUpdateAvatarFormSubmit (evt) {
     evt.preventDefault();
     toggleSaveButtonText(buttonSaveAvatar, true);
 
-    api.fetchEditAvatar(formValues['update-avatar'])
+    api.fetchEditAvatar(avatarUrlInput.value)
     .then((data) => {
         avatarImage.src = avatarUrlInput.value;
         formElementUpdateAvatar.reset();
@@ -108,12 +104,12 @@ function handleUpdateAvatarFormSubmit (evt) {
 };
 
 //функция сохранить (отправить) инфо профиля
-function handleProfileFormSubmit (formValues) {
-    // evt.preventDefault();
-    // const button = evt.submitter;
-    // toggleSaveButtonText(button, true);
+function handleProfileFormSubmit (evt) {
+    evt.preventDefault();
+    const button = evt.submitter;
+    toggleSaveButtonText(button, true);
 
-    api.fetchEditProfileInfo({name: formValues['profile-name'], about: formValues['profile-description']})
+    api.fetchEditProfileInfo({name: nameInput.value, about: jobInput.value})
     .then((res) => {
         profileName.textContent = nameInput.value;
         profileDescription.textContent = jobInput.value;
@@ -150,19 +146,11 @@ function handleAddCardFormSubmit (evt, settings) {
 
     fetchPostCard(item)
     .then((res) => {
-        const cardList = new Section({
-            items: [res], 
-            renderer: (card) => {
-                const cardNew = new Card(card, userId, '#cardTemplate', openImagePreview);
-                const element = cardNew.generate();
-                cardList.addItem(element);
-            }
-            }
-            , '.elements-container');
-        cardList.renderItems();
-        // handleSubmitButton(buttonCreateCard);
-        // closePopup(popupAddCard);
-        popupAddCard.close();    
+        const cardNew = new Card('.elements-container', '#cardTemplate');
+        cardNew.createCard(res, userId);
+        formElementAddCard.reset();
+        handleSubmitButton(buttonCreateCard);
+        closePopup(popupAddCard);
         })
     .catch((error) => {
         console.error(error);
@@ -187,8 +175,7 @@ avatarEditButton.addEventListener('click', function () {
 
 //открытие модального окна (добавить карточку)
 buttonAddCard.addEventListener('click', function () {
-    // openPopup(popupAddCard);
-    popupAddCard.open();
+    openPopup(popupAddCard);
 }) 
 
 //слушатель на форме редактировать профиль

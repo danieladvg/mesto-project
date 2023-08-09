@@ -30,9 +30,7 @@ export class Card {
             this._handleTrashButton(e);
         });
 
-        this._image.addEventListener('click', () => {
-            this._handleCardClick(this._getCardData());
-        });
+        this._element.querySelector('.card__image').addEventListener('click', () => this._handleCardClick());
     }
 
     _handleLikeButton() {
@@ -74,19 +72,12 @@ export class Card {
         }
     }
 
-    _getCardData() {
-        console.log('_getCardData');
-        const cardData = {name: this._title, link: this._image};
-        return cardData;
-    }
-
     // заполнение карточки данными
     generate() {
         this._element = this._getElement();
         this._cardLikeButton = this._element.querySelector('.card__like-button');
         this._trashButton = this._element.querySelector('.card__delete-button');
         this._likeCounter = this._element.querySelector('.card__like-counter');
-        this._image = this._element.querySelector('.card__image');
         this._setEventListeners();
 
         this._element.dataset.id = this._cardId;
