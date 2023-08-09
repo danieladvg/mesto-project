@@ -1,5 +1,7 @@
+import { Api } from './Api.js';
+
 export class Card {
-    constructor(item, userId, cardTemplate, handleCardClick, handleLikeButton, handleTrashButton){
+    constructor(item, userId, cardTemplate, handleCardClick){
         this._cardId = item._id;
         this._title = item.name;
         this._image = item.link;
@@ -8,8 +10,6 @@ export class Card {
         this._userId = userId;
         this._ownerId = item.owner._id;
         this._handleCardClick = handleCardClick;
-        this._handleLikeButton = handleLikeButton;
-        this._handleTrashButton = handleTrashButton;
     }
 
     // создание экземпляра карточки
@@ -72,6 +72,11 @@ export class Card {
             .catch((err) => console.log(err)); 
     }
 
+    _handleCardClick() {
+        const popupImage = new PopupWithImage(this._element);
+        popupImage.open();
+    }
+
 //проверить, есть ли мой лайк в массиве с лайками
 function checkOwnerLike (likes) {
     return likes.some(like => like._id === userId);
@@ -132,6 +137,15 @@ function createCard(item, userId) {
             return true;
     }
 }
+
+// //функция добавления карточек в DOM
+// export function renderCards (cards, userId) {
+//     cards.forEach((data) => {
+//     const cardNew = this.createCard(data, userId);
+//     this.elementsContainer.prepend(cardNew);
+// })
+// }
+
 
     cardLikeButton.addEventListener('click', function(e) {
         if(checkLikeOnCard(cardLikeButton)) {

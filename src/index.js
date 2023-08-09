@@ -80,6 +80,7 @@ export let userId;
 // import { toggleSaveButtonText } from './components/utils';
 // import { forEach } from 'core-js/core/array';
 
+// let userId;
 
 //получение страницы (данные пользователя + карточки)
 function getPage () {
@@ -90,11 +91,11 @@ function getPage () {
         profileName.textContent = userData.name;
         profileDescription.textContent = userData.about;
         avatarImage.src = userData.avatar;
-        userId = userData._id;
+        // userId = userData._id;
         const cardList = new Section({
             items: cards, 
             renderer: (card) => {
-                const cardNew = new Card(card, userId, '#cardTemplate', openImagePreview, likeCard, deleteCard);
+                const cardNew = new Card(card, userData._id, '#cardTemplate');
                 const element = cardNew.generate();
                 cardList.addItem(element);
             }
@@ -106,30 +107,17 @@ function getPage () {
         console.error(error);
     })
 }
-getPage();
 
-const userInfo = new UserInfo(profileName, profileDescription);
 
-const popupUpdateAvatar = new PopupWithForm('.popup_type_update-avatar', handleUpdateAvatarFormSubmit);
-const popupEditProfile = new PopupWithForm('.popup_type_editProfile', handleProfileFormSubmit);
-const popupAddCard = new PopupWithForm('.popup_type_addCard', handleAddCardFormSubmit);
-const popupImagePreview = new PopupWithImage('.popup_type_image-preview');
-
-function likeCard(cardId, isUnlike) {
-    let result;
-    if (isUnlike) {
-        result = api.fetchUnlikeCard(cardId);
-    } else {   
-        result = api.fetchLikeCard(cardId);
+const api = new Api({
+    baseUrl: 'https://nomoreparties.co/v1/plus-cohort-26',
+    headers: {
+        authorization: 'd48850ee-0174-40ac-94a8-4573c8ed93c1',
+        'Content-Type': 'application/json'
     }
-    return result;
-}
+});
 
-function deleteCard(cardId) {
-    let result;
-    result = api.fetchDeleteCard(this._cardId);
-    return result;
-}
+getPage();
 
 //функция сохранить (отправить) обновленный аватар
 function handleUpdateAvatarFormSubmit (evt) {
