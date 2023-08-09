@@ -1,4 +1,5 @@
-// import{elementsContainer, cardTemplate, userId} from '../index.js';
+import{elementsContainer, cardTemplate, userId} from '../index.js';
+// import { fetchDeleteCard, fetchLikeCard, fetchUnlikeCard } from './api.js';
 import { Api } from './api.js';
 import{openImagePreview} from './modal.js';
 
@@ -61,40 +62,39 @@ export class Card {
             }
         }
 
-        cardLikeButton.addEventListener('click', (e) => {
-            if(checkLikeOnCard(cardLikeButton)) {
-                api.fetchUnlikeCard(this.cardId)
-                .then((res) => {
-                    cardLikeCounter.textContent = res.likes.length;
-                    cardLikeButton.classList.remove("card__like-button_active");
-                })
-                .catch((err) => console.log(err));
-            } else {
-                api.fetchLikeCard(this.cardId)
-                .then((res) => {
-                    cardLikeCounter.textContent = res.likes.length;
-                    cardLikeButton.classList.add("card__like-button_active");
-                    cardLikeCounter.classList.add("card__like-counter_active");
+    cardLikeButton.addEventListener('click', function(e) {
+        if(checkLikeOnCard(cardLikeButton)) {
+            api.fetchUnlikeCard(cardId)
+            .then((res) => {
+                cardLikeCounter.textContent = res.likes.length;
+                cardLikeButton.classList.remove("card__like-button_active");
             })
             .catch((err) => console.log(err));
-            }
-        })
-
-        //функция удаления карточки
-        trashButton.addEventListener('click', (e) => {
-            console.log(this.cardId);
-            api.fetchDeleteCard(this.cardId)
+        } else {
+            api.fetchLikeCard(cardId)
             .then((res) => {
-                e.target.closest('.card').remove();
-            })
-            .catch((err) => console.log(err));    
+                cardLikeCounter.textContent = res.likes.length;
+                cardLikeButton.classList.add("card__like-button_active");
+                cardLikeCounter.classList.add("card__like-counter_active");
         })
+        .catch((err) => console.log(err));
+        }
+    })
+
+    // //функция удаления карточки
+    trashButton.addEventListener('click', function (e) {
+        api.fetchDeleteCard(cardId)
+        .then((res) => {
+            e.target.closest('.card').remove();
+        })
+        .catch((err) => console.log(err));    
+    })
 
     cardImage.addEventListener('click', () => openImagePreview(item));
 
-        return cardElement; 
-    }
+    return cardElement; 
 }
+
 
 const api = new Api();
 export {createCard}

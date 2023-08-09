@@ -39,7 +39,6 @@ import{renderCards, createCard} from './components/card.js';
 
 // import {fetchPostCard, fetchEditProfileInfo, fetchEditAvatar, fetchGetProfileInfo, fetchGetCards} from './components/api.js';
 import { Api } from './components/api';
-import { Card } from './components/card';
 import { toggleSaveButtonText } from './components/utils';
 
 export const sectionProfile = document.querySelector('.profile'); //секция profile
@@ -106,8 +105,6 @@ function getPage () {
         console.error(error);
     })
 }
-
-const api = new Api();
 getPage();
 
 //функция сохранить (отправить) обновленный аватар
@@ -115,7 +112,7 @@ function handleUpdateAvatarFormSubmit (evt) {
     evt.preventDefault();
     toggleSaveButtonText(buttonSaveAvatar, true);
 
-    api.fetchEditAvatar(avatarUrlInput.value)
+    fetchEditAvatar(avatarUrlInput.value)
     .then((data) => {
         avatarImage.src = avatarUrlInput.value;
         formElementUpdateAvatar.reset();
@@ -134,10 +131,11 @@ function handleUpdateAvatarFormSubmit (evt) {
 //функция сохранить (отправить) инфо профиля
 function handleProfileFormSubmit (evt) {
     evt.preventDefault();
+    // const form = evt.target;
     const button = evt.submitter;
     toggleSaveButtonText(button, true);
 
-    api.fetchEditProfileInfo({name: nameInput.value, about: jobInput.value})
+    fetchEditProfileInfo({name: nameInput.value, about: jobInput.value})
     .then((res) => {
         profileName.textContent = nameInput.value;
         profileDescription.textContent = jobInput.value;
