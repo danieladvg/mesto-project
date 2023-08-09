@@ -1,52 +1,13 @@
 import './pages/index.css';
 
-import {sectionProfile,
-    profileName,
-    profileDescription,
-    profileEditButton,
-    avatarImage,
-    avatarEditButton,
-    popupUpdateAvatar,
-    formElementUpdateAvatar,
-    avatarUrlInput,
-    buttonSaveAvatar,
-    popupEditProfile,
-    formElementEditProfile,
-    nameInput,
-    jobInput,
-    buttonSaveProfileInfo,
-    popupAddCard,
-    buttonAddCard,
-    cardNameInput,
-    cardUrlInput,
-    formElementAddCard,
-    buttonCreateCard,
-    elementsContainer,
-    cardTemplate,
-    popupImagePreview,
-    bigImageName,
-    imageUrl,
-    formElement,
-    inputElement,
-    saveButton,
-    validationConfig
-} from './utils/constants.js';
-
-import{enableValidation, handleSubmitButton} from './components/FormValidator.js'
+import{enableValidation, handleSubmitButton} from './components/validate.js'
 import{openPopup, closePopup} from './components/modal.js';
 // import{renderCards, createCard} from './components/card.js';
 // import{initialCards} from './components/cards.js'
 
 // import {fetchPostCard, fetchEditProfileInfo, fetchEditAvatar, fetchGetProfileInfo, fetchGetCards} from './components/api.js';
-import { Api } from './components/Api.js';
-import { Card } from './components/Card.js';
-import { Section } from './components/Section.js';
-import { Popup } from './components/Popup.js';
-import { PopupWithImage } from './components/PopupWithImage.js';
-import { PopupWithForm } from './components/PopupWithForm.js';
-import { UserInfo } from './components/UserInfo';
-import { FormValidator } from './components/FormValidator';
-
+import { Api } from './components/api.js';
+import { Card } from './components/card.js';
 import { toggleSaveButtonText } from './components/utils';
 
 export const sectionProfile = document.querySelector('.profile'); //секция profile
