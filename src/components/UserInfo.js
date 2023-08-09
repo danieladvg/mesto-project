@@ -1,18 +1,18 @@
 export class UserInfo {
     constructor({profileName, profileDescription}) {
-        this._profileName = profileName;
-        this._profileDescription = profileDescription;
+        this.profileName = profileName;
+        this.profileDescription = profileDescription;
     }
 
     getUserInfo() {
         return {
-            name: this._profileName.textContent,
-            job: this._profileDescription.textContent
+            name: this.profileName.textContent,
+            job: this.profileDescription.textContent
         }
     }
 
     setUserInfo(data) {
-        this._profileName.textContent = data.profileName;
-        this._profileDescription.textContent = data.profileDescription;
+        this.profileName.textContent = data.profileName;
+        this.profileDescription.textContent = data.profileDescription;
     }
 }

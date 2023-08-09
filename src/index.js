@@ -73,7 +73,8 @@ function getPage () {
                 const element = cardNew.generate();
                 cardList.addItem(element);
             }
-            }, '.elements-container');
+            }
+            , '.elements-container');
         cardList.renderItems();
     })
     .catch((error) => {
@@ -81,7 +82,6 @@ function getPage () {
     })
 }
 getPage();
-
 
 const userInfo = new UserInfo(profileName, profileDescription);
 
@@ -214,8 +214,21 @@ avatarEditButton.addEventListener('click', function () {
 
 //открытие модального окна (добавить карточку)
 buttonAddCard.addEventListener('click', function () {
-    openPopup(popupAddCard);
-}) 
+    // openPopup(popupAddCard);
+    popupAddCard.open();
+})
+
+
+const updateAvatarValidator = new FormValidator(validationConfig, formElementUpdateAvatar);
+updateAvatarValidator.enableValidation();
+
+// const editProfileValidator = new FormValidator(validationConfig, formElementEditProfile);
+// editProfileValidator.enableValidation();
+
+// const addCardValidator = new FormValidator(validationConfig, formElementAddCard);
+// addCardValidator.enableValidation();
+
+
 
 //слушатель на форме редактировать профиль
 formElementEditProfile.addEventListener('submit', handleProfileFormSubmit);
