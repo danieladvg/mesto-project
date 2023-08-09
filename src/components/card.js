@@ -23,8 +23,22 @@ export class Card {
     // добавляем слушатели событий
     _setEventListeners() {
         this._cardLikeButton.addEventListener('click', () => {
-            Promise.all([this._handleLikeButton(this._cardId, this._checkOwnerLike())])
-            .then(([res]) => {
+            this._handleLikeButton();
+        });
+
+        this._trashButton.addEventListener('click', (e) => {
+            this._handleTrashButton(e);
+        });
+
+        this._image.addEventListener('click', () => {
+            this._handleCardClick(this._getCardData());
+        });
+    }
+
+    _handleLikeButton() {
+        if (this._checkOwnerLike()) {
+            api.fetchUnlikeCard(this._cardId)
+            .then((res) => {
                 this._likes = res.likes.slice();
                 this._setLikeButtonState();
             })
@@ -61,6 +75,7 @@ export class Card {
     }
 
     _getCardData() {
+        console.log('_getCardData');
         const cardData = {name: this._title, link: this._image};
         return cardData;
     }
@@ -71,7 +86,7 @@ export class Card {
         this._cardLikeButton = this._element.querySelector('.card__like-button');
         this._trashButton = this._element.querySelector('.card__delete-button');
         this._likeCounter = this._element.querySelector('.card__like-counter');
-        this._imageContainer = this._element.querySelector('.card__image');
+        this._image = this._element.querySelector('.card__image');
         this._setEventListeners();
 
         this._element.dataset.id = this._cardId;

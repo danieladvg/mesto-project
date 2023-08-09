@@ -1,63 +1,56 @@
 import './pages/index.css';
 
-import{enableValidation, handleSubmitButton} from './components/validate.js'
+import {sectionProfile,
+    profileName,
+    profileDescription,
+    profileEditButton,
+    avatarImage,
+    avatarEditButton,
+    // popupUpdateAvatar,
+    formElementUpdateAvatar,
+    avatarUrlInput,
+    buttonSaveAvatar,
+    // popupEditProfile,
+    formElementEditProfile,
+    nameInput,
+    jobInput,
+    buttonSaveProfileInfo,
+    // popupAddCard,
+    buttonAddCard,
+    cardNameInput,
+    cardUrlInput,
+    formElementAddCard,
+    buttonCreateCard,
+    elementsContainer,
+    cardTemplate,
+    // popupImagePreview,
+    bigImageName,
+    imageUrl,
+    formElement,
+    inputElement,
+    saveButton,
+    validationConfig
+} from './utils/constants.js';
+
+import{enableValidation, handleSubmitButton} from './components/FormValidator.js'
 import{openPopup, closePopup} from './components/modal.js';
 // import{renderCards, createCard} from './components/card.js';
 // import{initialCards} from './components/cards.js'
 
 // import {fetchPostCard, fetchEditProfileInfo, fetchEditAvatar, fetchGetProfileInfo, fetchGetCards} from './components/api.js';
-import { Api } from './components/api';
-import { Card } from './components/card';
+import { Api } from './components/Api.js';
+import { Card } from './components/card.js';
+import { Section } from './components/Section.js';
+import { Popup } from './components/Popup.js';
+import { PopupWithImage } from './components/PopupWithImage.js';
+import { PopupWithForm } from './components/PopupWithForm.js';
+import { UserInfo } from './components/UserInfo';
+import { FormValidator } from './components/FormValidator';
+
 import { toggleSaveButtonText } from './components/utils';
 // import { forEach } from 'core-js/core/array';
 
-export const sectionProfile = document.querySelector('.profile'); //секция profile
-export const profileName = sectionProfile.querySelector('.profile__name'); //имя профиля
-export const profileDescription = sectionProfile.querySelector('.profile__description'); //информация о себе
-export const profileEditButton = sectionProfile.querySelector('.profile__edit-button'); //кнопка редактирования профиля
-export const avatarImage = sectionProfile.querySelector('.profile__avatar-image'); //аватар тег img
-export const avatarEditButton = sectionProfile.querySelector('.profile__edit-avatar-button'); //кнопка редактирования аватара
-
-export const popupUpdateAvatar = document.querySelector('.popup_type_update-avatar'); //модальное окно (обновить аватар)
-export const formElementUpdateAvatar = popupUpdateAvatar.querySelector('#avatarFormPopup'); //форма (обновить аватар)
-export const avatarUrlInput = popupUpdateAvatar.querySelector('#update-avatar-input'); //поле ввода ссылки на аватар
-export const buttonSaveAvatar = popupUpdateAvatar.querySelector('#updateAvatar-save-button'); //кнопка сохранить новый аватар
-
-export const popupEditProfile = document.querySelector('.popup_type_editProfile'); //модальное окно (редактировать профиль)
-export const formElementEditProfile = popupEditProfile.querySelector('#editProfileFormPopup'); //форма (редактировать профиль)
-export const nameInput = popupEditProfile.querySelector('#profile-name-input'); //поле ввода имени профиля
-export const jobInput = popupEditProfile.querySelector('#description-input'); //поле ввода информации о себе
-export const buttonSaveProfileInfo = popupEditProfile.querySelector('#editProfile-save-button'); //кнопка сохранить информацию профиля
-
-export const popupAddCard = document.querySelector('.popup_type_addCard'); //модальное окно (добавить карточку)
-export const buttonAddCard = sectionProfile.querySelector('.profile__add-button'); //кнопка добавить карточку
-export const cardNameInput = popupAddCard.querySelector('#card-name-input'); //поле ввода названия карточки
-export const cardUrlInput = popupAddCard.querySelector('#card-url-input'); //поле ввода ссылки на карточку
-export const formElementAddCard = popupAddCard.querySelector('#cardFormPopup');//форма (добавить карточку)
-export const buttonCreateCard = popupAddCard.querySelector('#addCard-save-button'); //кнопка создать карточку
-
-export const elementsContainer = document.querySelector('.elements-container'); //контейнер для карточек
-// export const cardTemplate = document.querySelector('#cardTemplate').content; //шаблон карточки
-
-export const popupImagePreview = document.querySelector('.popup_type_image-preview');// модальное окно (увеличить изображение карточки)
-export const bigImageName = document.querySelector('.popup__image-name'); //название большого изображения
-export const imageUrl = document.querySelector('.popup__image'); //ссылка на большое изображение
-
-export const formElement = document.querySelector('.popup__form'); //элемент формы
-export const inputElement = formElement.querySelector('.popup__input'); //элемент поля ввода
-
-export let userId;
-
-//объект настроек валидации форм
-export const validationConfig = {
-    formSelector: '.popup__form',
-    inputSelector: '.popup__input',
-    submitButtonSelector: '.popup__save-button',
-    inactiveButtonClass: 'popup__save-button_inactive',
-    inputErrorClass: 'popup__input_type_error',
-    errorClass: 'popup__input-error_active'
-};
-
+let userId;
 
 //получение страницы (данные пользователя + карточки)
 function getPage () {
@@ -68,11 +61,11 @@ function getPage () {
         profileName.textContent = userData.name;
         profileDescription.textContent = userData.about;
         avatarImage.src = userData.avatar;
-        userId = userData._id;
+        // userId = userData._id;
         const cardList = new Section({
             items: cards, 
             renderer: (card) => {
-                const cardNew = new Card(card, userId, '#cardTemplate', openImagePreview, likeCard, deleteCard);
+                const cardNew = new Card(card, userId, '#cardTemplate', openImagePreview);
                 const element = cardNew.generate();
                 cardList.addItem(element);
             }
@@ -88,37 +81,17 @@ function getPage () {
 const api = new Api();
 const card = new Card('.elements-container', '#cardTemplate');
 getPage();
-
-
-const userInfo = new UserInfo(profileName, profileDescription);
-
 const popupUpdateAvatar = new PopupWithForm('.popup_type_update-avatar', handleUpdateAvatarFormSubmit);
 const popupEditProfile = new PopupWithForm('.popup_type_editProfile', handleProfileFormSubmit);
 const popupAddCard = new PopupWithForm('.popup_type_addCard', handleAddCardFormSubmit);
 const popupImagePreview = new PopupWithImage('.popup_type_image-preview');
-
-function likeCard(cardId, isUnlike) {
-    let result;
-    if (isUnlike) {
-        result = api.fetchUnlikeCard(cardId);
-    } else {   
-        result = api.fetchLikeCard(cardId);
-    }
-    return result;
-}
-
-function deleteCard(cardId) {
-    let result;
-    result = api.fetchDeleteCard(this._cardId);
-    return result;
-}
 
 //функция сохранить (отправить) обновленный аватар
 function handleUpdateAvatarFormSubmit (evt) {
     evt.preventDefault();
     toggleSaveButtonText(buttonSaveAvatar, true);
 
-    fetchEditAvatar(avatarUrlInput.value)
+    api.fetchEditAvatar(formValues['update-avatar'])
     .then((data) => {
         avatarImage.src = avatarUrlInput.value;
         formElementUpdateAvatar.reset();
@@ -135,19 +108,17 @@ function handleUpdateAvatarFormSubmit (evt) {
 };
 
 //функция сохранить (отправить) инфо профиля
-function handleProfileFormSubmit (evt) {
-    evt.preventDefault();
-    // const form = evt.target;
-    const button = evt.submitter;
-    toggleSaveButtonText(button, true);
+function handleProfileFormSubmit (formValues) {
+    // evt.preventDefault();
+    // const button = evt.submitter;
+    // toggleSaveButtonText(button, true);
 
-    fetchEditProfileInfo({name: nameInput.value, about: jobInput.value})
+    api.fetchEditProfileInfo({name: formValues['profile-name'], about: formValues['profile-description']})
     .then((res) => {
-        profileName.textContent = formValues['profile-name'];
-        profileDescription.textContent = formValues['profile-description'];
-        // handleSubmitButton(buttonSaveProfileInfo);
-        // closePopup(popupEditProfile);
-        popupEditProfile.close();
+        profileName.textContent = nameInput.value;
+        profileDescription.textContent = jobInput.value;
+        handleSubmitButton(buttonSaveProfileInfo);
+        closePopup(popupEditProfile);
     })
     .catch((error) => {
         console.error(error);
@@ -182,7 +153,7 @@ function handleAddCardFormSubmit (evt, settings) {
         const cardList = new Section({
             items: [res], 
             renderer: (card) => {
-                const cardNew = new Card(card, userId, '#cardTemplate', {openImagePreview, likeCard, deleteCard});
+                const cardNew = new Card(card, userId, '#cardTemplate', openImagePreview);
                 const element = cardNew.generate();
                 cardList.addItem(element);
             }
@@ -204,8 +175,7 @@ function handleAddCardFormSubmit (evt, settings) {
 
 //открытие модального окна (редактировать профиль)
 profileEditButton.addEventListener('click', function () {
-    // openPopup(popupEditProfile);
-    popupEditProfile.open();
+    openPopup(popupEditProfile);
     nameInput.value = profileName.textContent;
     jobInput.value = profileDescription.textContent;
 });
@@ -219,19 +189,7 @@ avatarEditButton.addEventListener('click', function () {
 buttonAddCard.addEventListener('click', function () {
     // openPopup(popupAddCard);
     popupAddCard.open();
-})
-
-
-const updateAvatarValidator = new FormValidator(validationConfig, formElementUpdateAvatar);
-updateAvatarValidator.enableValidation();
-
-// const editProfileValidator = new FormValidator(validationConfig, formElementEditProfile);
-// editProfileValidator.enableValidation();
-
-// const addCardValidator = new FormValidator(validationConfig, formElementAddCard);
-// addCardValidator.enableValidation();
-
-
+}) 
 
 //слушатель на форме редактировать профиль
 formElementEditProfile.addEventListener('submit', handleProfileFormSubmit);
