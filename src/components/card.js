@@ -96,13 +96,13 @@ export class Card {
 
 }
 
-const api = new Api({
-    baseUrl: 'https://nomoreparties.co/v1/plus-cohort-26',
-    headers: {
-        authorization: 'd48850ee-0174-40ac-94a8-4573c8ed93c1',
-        'Content-Type': 'application/json'
-    }
-});
+// //функция добавления карточек в DOM
+// export function renderCards (cards, userId) {
+//     cards.forEach((data) => {
+//     const cardNew = this.createCard(data, userId);
+//     this.elementsContainer.prepend(cardNew);
+// })
+// }
 
 
 const api = new Api();
