@@ -6,48 +6,9 @@ import{openPopup, closePopup} from './components/modal.js';
 // import{initialCards} from './components/cards.js'
 
 // import {fetchPostCard, fetchEditProfileInfo, fetchEditAvatar, fetchGetProfileInfo, fetchGetCards} from './components/api.js';
-import { Api } from './components/api.js';
-import { Card } from './components/card.js';
+import { Api } from './components/api';
+import { Card } from './components/card';
 import { toggleSaveButtonText } from './components/utils';
-
-export const sectionProfile = document.querySelector('.profile'); //секция profile
-export const profileName = sectionProfile.querySelector('.profile__name'); //имя профиля
-export const profileDescription = sectionProfile.querySelector('.profile__description'); //информация о себе
-export const profileEditButton = sectionProfile.querySelector('.profile__edit-button'); //кнопка редактирования профиля
-export const avatarImage = sectionProfile.querySelector('.profile__avatar-image'); //аватар тег img
-export const avatarEditButton = sectionProfile.querySelector('.profile__edit-avatar-button'); //кнопка редактирования аватара
-
-export const popupUpdateAvatar = document.querySelector('.popup_type_update-avatar'); //модальное окно (обновить аватар)
-export const formElementUpdateAvatar = popupUpdateAvatar.querySelector('#avatarFormPopup'); //форма (обновить аватар)
-export const avatarUrlInput = popupUpdateAvatar.querySelector('#update-avatar-input'); //поле ввода ссылки на аватар
-export const buttonSaveAvatar = popupUpdateAvatar.querySelector('#updateAvatar-save-button'); //кнопка сохранить новый аватар
-
-export const popupEditProfile = document.querySelector('.popup_type_editProfile'); //модальное окно (редактировать профиль)
-export const formElementEditProfile = popupEditProfile.querySelector('#editProfileFormPopup'); //форма (редактировать профиль)
-export const nameInput = popupEditProfile.querySelector('#profile-name-input'); //поле ввода имени профиля
-export const jobInput = popupEditProfile.querySelector('#description-input'); //поле ввода информации о себе
-export const buttonSaveProfileInfo = popupEditProfile.querySelector('#editProfile-save-button'); //кнопка сохранить информацию профиля
-
-export const popupAddCard = document.querySelector('.popup_type_addCard'); //модальное окно (добавить карточку)
-export const buttonAddCard = sectionProfile.querySelector('.profile__add-button'); //кнопка добавить карточку
-export const cardNameInput = popupAddCard.querySelector('#card-name-input'); //поле ввода названия карточки
-export const cardUrlInput = popupAddCard.querySelector('#card-url-input'); //поле ввода ссылки на карточку
-export const formElementAddCard = popupAddCard.querySelector('#cardFormPopup');//форма (добавить карточку)
-export const buttonCreateCard = popupAddCard.querySelector('#addCard-save-button'); //кнопка создать карточку
-
-export const elementsContainer = document.querySelector('.elements-container'); //контейнер для карточек
-export const cardTemplate = document.querySelector('#cardTemplate').content; //шаблон карточки
-
-export const popupImagePreview = document.querySelector('.popup_type_image-preview');// модальное окно (увеличить изображение карточки)
-export const bigImageName = document.querySelector('.popup__image-name'); //название большого изображения
-export const imageUrl = document.querySelector('.popup__image'); //ссылка на большое изображение
-
-export const formElement = document.querySelector('.popup__form'); //элемент формы
-export const inputElement = formElement.querySelector('.popup__input'); //элемент поля ввода
-
-export let userId;
-
-// import { toggleSaveButtonText } from './components/utils';
 // import { forEach } from 'core-js/core/array';
 
 export const sectionProfile = document.querySelector('.profile'); //секция profile
@@ -108,10 +69,7 @@ function getPage () {
         profileDescription.textContent = userData.about;
         avatarImage.src = userData.avatar;
         userId = userData._id;
-        cards.forEach((data) => {
-            const cardNew = new Card('.elements-container', '#cardTemplate');
-            cardNew.createCard(data, userId);
-        });
+        card.renderCards(cards, userId);
     })
     .catch((error) => {
         console.error(error);
@@ -120,7 +78,7 @@ function getPage () {
 
 
 const api = new Api();
-// const card = new Card('.elements-container', '#cardTemplate');
+const card = new Card('.elements-container', '#cardTemplate');
 getPage();
 
 
@@ -193,19 +151,11 @@ function handleAddCardFormSubmit (evt, settings) {
 
     fetchPostCard(item)
     .then((res) => {
-        const cardList = new Section({
-            items: [res], 
-            renderer: (card) => {
-                const cardNew = new Card(card, userId, '#cardTemplate', {openImagePreview, likeCard, deleteCard});
-                const element = cardNew.generate();
-                cardList.addItem(element);
-            }
-            }
-            , '.elements-container');
-        cardList.renderItems();
-        // handleSubmitButton(buttonCreateCard);
-        // closePopup(popupAddCard);
-        popupAddCard.close();    
+        const cardNew = new Card('.elements-container', '#cardTemplate');
+        cardNew.createCard(res, userId);
+        formElementAddCard.reset();
+        handleSubmitButton(buttonCreateCard);
+        closePopup(popupAddCard);
         })
     .catch((error) => {
         console.error(error);
