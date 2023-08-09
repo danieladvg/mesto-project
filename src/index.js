@@ -61,16 +61,12 @@ function getPage () {
         profileName.textContent = userData.name;
         profileDescription.textContent = userData.about;
         avatarImage.src = userData.avatar;
-        // userId = userData._id;
-        const cardList = new Section({
-            items: cards, 
-            renderer: (card) => {
-                const cardNew = new Card(card, userData._id, '#cardTemplate');
-                const element = cardNew.generate();
-                cardList.addItem(element);
-            }
-            }, '.elements-container');
-        cardList.renderItems();
+        userId = userData._id;
+        cards.forEach((data) => {
+            const cardNew = new Card(data, userId, '#cardTemplate', );
+            const cardElement = cardNew.generate();
+            document.querySelector('.elements-container').prepend(cardElement);
+        });
     })
     .catch((error) => {
         console.error(error);
