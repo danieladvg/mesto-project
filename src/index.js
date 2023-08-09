@@ -1,8 +1,40 @@
 import './pages/index.css';
 
-import{enableValidation, handleSubmitButton} from './components/validate.js'
-import{openPopup, closePopup} from './components/modal.js';
-import{renderCards, createCard} from './components/card.js';
+import {sectionProfile,
+    profileName,
+    profileDescription,
+    profileEditButton,
+    avatarImage,
+    avatarEditButton,
+    // popupUpdateAvatar,
+    formElementUpdateAvatar,
+    avatarUrlInput,
+    buttonSaveAvatar,
+    // popupEditProfile,
+    formElementEditProfile,
+    nameInput,
+    jobInput,
+    buttonSaveProfileInfo,
+    // popupAddCard,
+    buttonAddCard,
+    cardNameInput,
+    cardUrlInput,
+    formElementAddCard,
+    buttonCreateCard,
+    elementsContainer,
+    cardTemplate,
+    // popupImagePreview,
+    bigImageName,
+    imageUrl,
+    formElement,
+    inputElement,
+    saveButton,
+    validationConfig
+} from './utils/constants.js';
+
+import{enableValidation, handleSubmitButton} from './components/FormValidator.js'
+// import{openPopup, closePopup} from './components/modal.js';
+// import{renderCards, createCard} from './components/card.js';
 // import{initialCards} from './components/cards.js'
 
 import {fetchPostCard, fetchEditProfileInfo, fetchEditAvatar, fetchGetProfileInfo, fetchGetCards} from './components/api.js';
@@ -45,15 +77,8 @@ export const inputElement = formElement.querySelector('.popup__input'); //эле
 
 export let userId;
 
-//объект настроек валидации форм
-export const validationConfig = {
-    formSelector: '.popup__form',
-    inputSelector: '.popup__input',
-    submitButtonSelector: '.popup__save-button',
-    inactiveButtonClass: 'popup__save-button_inactive',
-    inputErrorClass: 'popup__input_type_error',
-    errorClass: 'popup__input-error_active'
-};
+// import { toggleSaveButtonText } from './components/utils';
+// import { forEach } from 'core-js/core/array';
 
 
 //получение страницы (данные пользователя + карточки)

@@ -41,7 +41,7 @@ export class Card {
             .catch((err) => console.log(err));
         });
 
-        this._imageContainer.addEventListener('click', () => {
+        this._image.addEventListener('click', () => {
             this._handleCardClick(this._getCardData());
         });
     }
@@ -96,16 +96,30 @@ function createCard(item, userId) {
         cardLikeButton.classList.add("card__like-button_active");
     }
 
-    if(item.owner._id !== userId) {
-        cardElement.querySelector('.card').removeChild(trashButton);
+    _getCardData() {
+        const cardData = {name: this._title, link: this._image};
+        return cardData;
     }
 
+    // заполнение карточки данными
+    generate() {
+        this._element = this._getElement();
+        this._cardLikeButton = this._element.querySelector('.card__like-button');
+        this._trashButton = this._element.querySelector('.card__delete-button');
+        this._likeCounter = this._element.querySelector('.card__like-counter');
+        this._imageContainer = this._element.querySelector('.card__image');
+        this._setEventListeners();
 
-    if(item.likes.length > 0) {
-        cardLikeCounter.classList.add("card__like-counter_active");
-    } else {
-        cardLikeCounter.classList.remove("card__like-counter_active");
-    }
+        this._element.dataset.id = this._cardId;
+        this._element.querySelector('.card__title').textContent = this._title;
+        this._element.querySelector('.card__image').src = this._image;
+        this._element.querySelector('.card__image').alt = this._title;
+
+        this._setLikeButtonState();
+
+        if(this._ownerId !== this._userId) {
+            this._element.removeChild(this._trashButton);
+        }
 
     // //функция лайк карточки
     // cardLikeButton.addEventListener("click", function (e) {
