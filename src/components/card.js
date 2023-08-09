@@ -1,15 +1,17 @@
+// import{elementsContainer, cardTemplate, userId} from '../index.js';
+import { Api } from './api.js';
+import{openImagePreview} from './modal.js';
+
 export class Card {
-    constructor(item, userId, cardTemplate, handleCardClick, handleLikeButton, handleTrashButton){
-        this._cardId = item._id;
-        this._title = item.name;
-        this._image = item.link;
-        this._likes = item.likes;        
-        this._cardTemplate = cardTemplate;
-        this._userId = userId;
-        this._ownerId = item.owner._id;
-        this._handleCardClick = handleCardClick;
-        this._handleLikeButton = handleLikeButton;
-        this._handleTrashButton = handleTrashButton;
+    constructor(elementsContainer, cardTemplate){
+        this.elementsContainer = document.querySelector(elementsContainer);
+        this.cardTemplate = document.querySelector(cardTemplate).content;
+        // this.userId = userId;
+    }
+
+//проверить, есть ли мой лайк в массиве с лайками
+    _checkOwnerLike (likes, userId) {
+        return likes.some(like => like._id === userId);
     }
 
     //функция добавления карточки в DOM
@@ -20,7 +22,7 @@ export class Card {
     })
     }
 
-// функция создания карточки в DOM
+// функция создания карточки
     createCard(item, userId) {
 
         const cardElement = this.cardTemplate.cloneNode(true);
@@ -42,12 +44,37 @@ export class Card {
             cardLikeButton.classList.add("card__like-button_active");
         }
 
-    _handleLikeButton() {
-        if (this._checkOwnerLike()) {
-            api.fetchUnlikeCard(this._cardId)
-            .then((res) => {
-                this._likes = res.likes.slice();
-                this._setLikeButtonState();
+        if(item.owner._id !== userId) {
+            cardElement.querySelector('.card').removeChild(trashButton);
+        }
+
+        if(item.likes.length > 0) {
+            cardLikeCounter.classList.add("card__like-counter_active");
+        } else {
+            cardLikeCounter.classList.remove("card__like-counter_active");
+        }
+
+        //проверить, есть ли на карточке лайк
+        const checkLikeOnCard = (cardLikeButton) => {
+            if (cardLikeButton.classList.contains ('card__like-button_active')) {
+                return true;
+            }
+        }
+
+        cardLikeButton.addEventListener('click', (e) => {
+            if(checkLikeOnCard(cardLikeButton)) {
+                api.fetchUnlikeCard(this.cardId)
+                .then((res) => {
+                    cardLikeCounter.textContent = res.likes.length;
+                    cardLikeButton.classList.remove("card__like-button_active");
+                })
+                .catch((err) => console.log(err));
+            } else {
+                api.fetchLikeCard(this.cardId)
+                .then((res) => {
+                    cardLikeCounter.textContent = res.likes.length;
+                    cardLikeButton.classList.add("card__like-button_active");
+                    cardLikeCounter.classList.add("card__like-counter_active");
             })
             .catch((err) => console.log(err));
             }
@@ -55,28 +82,19 @@ export class Card {
 
         //функция удаления карточки
         trashButton.addEventListener('click', (e) => {
+            console.log(this.cardId);
             api.fetchDeleteCard(this.cardId)
             .then((res) => {
                 e.target.closest('.card').remove();
             })
-            .catch((err) => console.log(err));
-        });
+            .catch((err) => console.log(err));    
+        })
 
-        cardImage.addEventListener('click', () => openImagePreview(item));
+    cardImage.addEventListener('click', () => openImagePreview(item));
 
-        this.elementsContainer.prepend(cardElement);
-
-        return this._element;
+        return cardElement; 
     }
-
 }
-// //функция добавления карточек в DOM
-// export function renderCards (cards, userId) {
-//     cards.forEach((data) => {
-//     const cardNew = this.createCard(data, userId);
-//     this.elementsContainer.prepend(cardNew);
-// })
-// }
-
 
 const api = new Api();
+export {createCard}
