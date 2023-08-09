@@ -143,11 +143,8 @@ function handleProfileFormSubmit (evt) {
 
     fetchEditProfileInfo({name: nameInput.value, about: jobInput.value})
     .then((res) => {
-        // userInfo.setUserInfo(formValues);
-
         profileName.textContent = formValues['profile-name'];
         profileDescription.textContent = formValues['profile-description'];
-
         // handleSubmitButton(buttonSaveProfileInfo);
         // closePopup(popupEditProfile);
         popupEditProfile.close();
@@ -209,9 +206,8 @@ function handleAddCardFormSubmit (evt, settings) {
 profileEditButton.addEventListener('click', function () {
     // openPopup(popupEditProfile);
     popupEditProfile.open();
-    const {name, about} = userInfo.getUserInfo();
-    nameInput.value = name;
-    jobInput.value = about;
+    nameInput.value = profileName.textContent;
+    jobInput.value = profileDescription.textContent;
 });
 
 //открытие модального окна (обновить аватар)
