@@ -66,7 +66,15 @@ function getPage () {
         profileDescription.textContent = userData.about;
         avatarImage.src = userData.avatar;
         userId = userData._id;
-        renderCards(cards, userId)
+        const cardList = new Section({
+            items: cards, 
+            renderer: (card) => {
+                const cardNew = new Card(card, userId, '#cardTemplate', openImagePreview, likeCard, deleteCard);
+                const element = cardNew.generate();
+                cardList.addItem(element);
+            }
+            }, '.elements-container');
+        cardList.renderItems();
     })
     .catch((error) => {
         console.error(error);
@@ -74,6 +82,29 @@ function getPage () {
 }
 getPage();
 
+
+const userInfo = new UserInfo(profileName, profileDescription);
+
+const popupUpdateAvatar = new PopupWithForm('.popup_type_update-avatar', handleUpdateAvatarFormSubmit);
+const popupEditProfile = new PopupWithForm('.popup_type_editProfile', handleProfileFormSubmit);
+const popupAddCard = new PopupWithForm('.popup_type_addCard', handleAddCardFormSubmit);
+const popupImagePreview = new PopupWithImage('.popup_type_image-preview');
+
+function likeCard(cardId, isUnlike) {
+    let result;
+    if (isUnlike) {
+        result = api.fetchUnlikeCard(cardId);
+    } else {   
+        result = api.fetchLikeCard(cardId);
+    }
+    return result;
+}
+
+function deleteCard(cardId) {
+    let result;
+    result = api.fetchDeleteCard(this._cardId);
+    return result;
+}
 
 //функция сохранить (отправить) обновленный аватар
 function handleUpdateAvatarFormSubmit (evt) {
@@ -144,11 +175,19 @@ function handleAddCardFormSubmit (evt, settings) {
 
     fetchPostCard(item)
     .then((res) => {
-        const card = createCard(res);
-        elementsContainer.prepend(card);
-        formElementAddCard.reset();
-        handleSubmitButton(buttonCreateCard);
-        closePopup(popupAddCard);
+        const cardList = new Section({
+            items: [res], 
+            renderer: (card) => {
+                const cardNew = new Card(card, userId, '#cardTemplate', {openImagePreview, likeCard, deleteCard});
+                const element = cardNew.generate();
+                cardList.addItem(element);
+            }
+            }
+            , '.elements-container');
+        cardList.renderItems();
+        // handleSubmitButton(buttonCreateCard);
+        // closePopup(popupAddCard);
+        popupAddCard.close();    
         })
     .catch((error) => {
         console.error(error);
