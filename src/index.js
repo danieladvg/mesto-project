@@ -38,17 +38,9 @@ import{openPopup, closePopup} from './components/modal.js';
 // import{initialCards} from './components/cards.js'
 
 // import {fetchPostCard, fetchEditProfileInfo, fetchEditAvatar, fetchGetProfileInfo, fetchGetCards} from './components/api.js';
-import { Api } from './components/Api.js';
-import { Card } from './components/Card.js';
-import { Section } from './components/Section.js';
-import { Popup } from './components/Popup.js';
-import { PopupWithImage } from './components/PopupWithImage.js';
-import { PopupWithForm } from './components/PopupWithForm.js';
-import { UserInfo } from './components/UserInfo';
-import { FormValidator } from './components/FormValidator';
-
+import { Api } from './components/api.js';
+import { Card } from './components/card.js';
 import { toggleSaveButtonText } from './components/utils';
-// import { forEach } from 'core-js/core/array';
 
 // let userId;
 
@@ -63,9 +55,8 @@ function getPage () {
         avatarImage.src = userData.avatar;
         userId = userData._id;
         cards.forEach((data) => {
-            const cardNew = new Card(data, userId, '#cardTemplate', );
-            const cardElement = cardNew.generate();
-            document.querySelector('.elements-container').prepend(cardElement);
+            const cardNew = new Card('.elements-container', '#cardTemplate');
+            cardNew.createCard(data, userId);
         });
     })
     .catch((error) => {
@@ -142,8 +133,9 @@ function handleAddCardFormSubmit (evt, settings) {
 
     fetchPostCard(item)
     .then((res) => {
-        const cardNew = new Card('.elements-container', '#cardTemplate');
-        cardNew.createCard(res, userId);
+        console.log(res);
+        const cardNew = card.createCard(res, userId);
+        elementsContainer.prepend(cardNew);
         formElementAddCard.reset();
         handleSubmitButton(buttonCreateCard);
         closePopup(popupAddCard);
