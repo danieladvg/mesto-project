@@ -16,7 +16,7 @@ import {
 } from './utils/constants.js';
 
 import { Api } from './components/Api.js';
-import { Card } from './components/Card.js';
+import { Card } from './components/card.js';
 import { Section } from './components/Section.js';
 import { PopupWithImage } from './components/PopupWithImage.js';
 import { PopupWithForm } from './components/PopupWithForm.js';
@@ -25,6 +25,7 @@ import { FormValidator } from './components/FormValidator';
 
 
 let userId;
+let cardList;
 
 //получение страницы (данные пользователя + карточки)
 function getPage () {
@@ -36,10 +37,23 @@ function getPage () {
             name: userData.name,
             about: userData.about
         })
-        // userInfo.setAvatar(userData.avatar);
-        avatarImage.src = userData.avatar;
+        userInfo.setAvatar(userData.avatar);
+        // avatarImage.src = userData.avatar;
         userId = userData._id;
-        createCards(cards);
+        cardList = new Section({
+            items: cards, 
+            renderer: (card) => {
+                addNewCard(card);
+                // const cardNew = new Card(card, userId, '#cardTemplate', openImagePreview, likeCard, deleteCard);
+                // const element = cardNew.generate();
+                // cardList.addItem(element);
+            }
+            }
+            , '.elements-container'
+        );
+        cardList.renderItems();
+
+        // createCards(cards);
     })
     .catch((error) => {
         console.error(error);
@@ -58,24 +72,34 @@ const api = new Api({
 getPage();
 
 
-const userInfo = new UserInfo(profileName, profileDescription, editProfileInfo, avatarImage);
+const userInfo = new UserInfo(profileName, profileDescription, avatarImage, editProfileInfo, editAvatar);
 
 const popupUpdateAvatar = new PopupWithForm('.popup_type_update-avatar', handleUpdateAvatarFormSubmit);
+popupUpdateAvatar.setEventListeners();
 const popupEditProfile = new PopupWithForm('.popup_type_editProfile', handleProfileFormSubmit);
+popupEditProfile.setEventListeners();
 const popupAddCard = new PopupWithForm('.popup_type_addCard', handleAddCardFormSubmit);
+popupAddCard.setEventListeners();
 const popupImagePreview = new PopupWithImage('.popup_type_image-preview');
+popupImagePreview.setEventListeners();
 
-function createCards(cards) {
-    const cardList = new Section({
-        items: cards, 
-        renderer: (card) => {
-            const cardNew = new Card(card, userId, '#cardTemplate', openImagePreview, likeCard, deleteCard);
-            const element = cardNew.generate();
-            cardList.addItem(element);
-        }
-        }, '.elements-container');
-    cardList.renderItems();
+function addNewCard(card) {
+    const cardNew = new Card(card, userId, '#cardTemplate', openImagePreview, likeCard, deleteCard);
+    const element = cardNew.generate();
+    return element;
 }
+
+// function createCards(cards) {
+    // const cardList = new Section({
+    //     items: cards, 
+    //     renderer: (card) => {
+    //         const cardNew = new Card(card, userId, '#cardTemplate', openImagePreview, likeCard, deleteCard);
+    //         const element = cardNew.generate();
+    //         cardList.addItem(element);
+    //     }
+    //     }, '.elements-container');
+    // cardList.renderItems();
+// }
 
 function likeCard(cardId, isUnlike) {
     let result;
@@ -95,19 +119,25 @@ function deleteCard(cardId) {
 
 //функция сохранить (отправить) обновленный аватар
 function handleUpdateAvatarFormSubmit (formValues) {
-    api.fetchEditAvatar(formValues['update-avatar'])
-    .then((data) => {
-        // userInfo.setAvatar(res);
-        avatarImage.src = data.avatar;
-        popupUpdateAvatar.close();
-    })
-    .catch((error) => {
-        console.error(error);
-    })  
+    userInfo.setAvatar(formValues['update-avatar']);
+    // api.fetchEditAvatar(formValues['update-avatar'])
+    // .then((data) => {
+    //     // userInfo.setAvatar(res);
+    //     avatarImage.src = data.avatar;
+    //     popupUpdateAvatar.close();
+    // })
+    // .catch((error) => {
+    //     console.error(error);
+    // })  
 };
 
 function editProfileInfo(data) {
     let result = api.fetchEditProfileInfo(data);
+    return result;
+}
+
+function editAvatar(data) {
+    let result = api.fetchEditAvatar(data);
     return result;
 }
 
@@ -130,7 +160,8 @@ function handleAddCardFormSubmit (formValues) {
 
     api.fetchPostCard(item)
     .then((res) => {
-        createCards([res]);
+        // createCards([res]);
+        cardList.addItem(addNewCard(res));
         popupAddCard.close();    
         })
     .catch((error) => {

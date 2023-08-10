@@ -1,9 +1,10 @@
 export class UserInfo {
-    constructor(profileName, profileDescription, editProfileInfo, avatarImage) {
+    constructor(profileName, profileDescription, avatarImage, editProfileInfo, editAvatar) {
         this._profileName = profileName;
         this._profileDescription = profileDescription;
-        // this._avatarImage = avatarImage;
+        this._avatarImage = avatarImage;
         this._editProfileInfo = editProfileInfo;
+        this._editAvatar = editAvatar;
     }
 
     getUserInfo() {
@@ -22,7 +23,11 @@ export class UserInfo {
             .catch((err) => console.log(err));
     }
 
-    // setAvatar(data) {
-    //     this._avatarImage.src = res.avatar;
-    // }
+    setAvatar(url) {
+        Promise.all([this._editAvatar(url)])
+        .then(([res]) => {
+            this._avatarImage.src = res.avatar;
+        })
+        .catch((err) => console.log(err));
+    }
 }

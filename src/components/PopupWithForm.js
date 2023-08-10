@@ -22,7 +22,7 @@ export class PopupWithForm extends Popup {
             this._saveButton.textContent = 'Сохранение...';
         } else {
             this._saveButton.textContent = 'Сохранить';
-        }
+        };
     }
 
     setEventListeners() {
@@ -31,12 +31,17 @@ export class PopupWithForm extends Popup {
             evt.preventDefault();
             this._toggleSaveButtonText(true);
             this._handleSubmitForm(this._getInputValues());
-            this._toggleSaveButtonText(false);
+            this.close();
         });
     }
 
     close() {
         super.close();
         this._form.reset();
+    }
+
+    open() {
+        super.open();
+        this._toggleSaveButtonText(false);
     }
 }
