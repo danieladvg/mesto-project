@@ -43,7 +43,7 @@ function getPage () {
         cardList = new Section({
             items: cards, 
             renderer: (card) => {
-                addNewCard(card);
+                cardList.addItem(addNewCard(card));
                 // const cardNew = new Card(card, userId, '#cardTemplate', openImagePreview, likeCard, deleteCard);
                 // const element = cardNew.generate();
                 // cardList.addItem(element);
