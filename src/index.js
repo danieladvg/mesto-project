@@ -38,22 +38,16 @@ function getPage () {
             about: userData.about
         })
         userInfo.setAvatar(userData.avatar);
-        // avatarImage.src = userData.avatar;
         userId = userData._id;
         cardList = new Section({
             items: cards, 
             renderer: (card) => {
                 cardList.addItem(addNewCard(card));
-                // const cardNew = new Card(card, userId, '#cardTemplate', openImagePreview, likeCard, deleteCard);
-                // const element = cardNew.generate();
-                // cardList.addItem(element);
             }
             }
             , '.elements-container'
         );
         cardList.renderItems();
-
-        // createCards(cards);
     })
     .catch((error) => {
         console.error(error);
@@ -88,19 +82,6 @@ function addNewCard(card) {
     const element = cardNew.generate();
     return element;
 }
-
-// function createCards(cards) {
-    // const cardList = new Section({
-    //     items: cards, 
-    //     renderer: (card) => {
-    //         const cardNew = new Card(card, userId, '#cardTemplate', openImagePreview, likeCard, deleteCard);
-    //         const element = cardNew.generate();
-    //         cardList.addItem(element);
-    //     }
-    //     }, '.elements-container');
-    // cardList.renderItems();
-// }
-
 function likeCard(cardId, isUnlike) {
     let result;
     if (isUnlike) {
@@ -119,33 +100,21 @@ function deleteCard(cardId) {
 
 //функция сохранить (отправить) обновленный аватар
 function handleUpdateAvatarFormSubmit (formValues) {
-    userInfo.setAvatar(formValues['update-avatar']);
-    // api.fetchEditAvatar(formValues['update-avatar'])
-    // .then((data) => {
-    //     // userInfo.setAvatar(res);
-    //     avatarImage.src = data.avatar;
-    //     popupUpdateAvatar.close();
-    // })
-    // .catch((error) => {
-    //     console.error(error);
-    // })  
+    return userInfo.setAvatar(formValues['update-avatar']);
 };
 
 function editProfileInfo(data) {
-    let result = api.fetchEditProfileInfo(data);
-    return result;
+    return api.fetchEditProfileInfo(data);
 }
 
 function editAvatar(data) {
-    let result = api.fetchEditAvatar(data);
-    return result;
+    return api.fetchEditAvatar(data);
 }
 
 //функция сохранить (отправить) инфо профиля
 function handleProfileFormSubmit (formValues) {
-    userInfo.setUserInfo({name: formValues['profile-name'], about: formValues['profile-description']});
+    return userInfo.setUserInfo({name: formValues['profile-name'], about: formValues['profile-description']});
 };
-
 
 //добавление новой карточки 
 function handleAddCardFormSubmit (formValues) {
@@ -158,21 +127,19 @@ function handleAddCardFormSubmit (formValues) {
         likes: []
     }
 
-    api.fetchPostCard(item)
-    .then((res) => {
-        // createCards([res]);
-        cardList.addItem(addNewCard(res));
-        popupAddCard.close();    
+    return api.fetchPostCard(item)
+        .then((res) => {
+            cardList.addItem(addNewCard(res));
+            popupAddCard.close();    
+            })
+        .catch((error) => {
+            console.error(error);
         })
-    .catch((error) => {
-        console.error(error);
-    })
 }
 
 function openImagePreview(data) {
     popupImagePreview.open(data);
 }
-
 
 //открытие модального окна (редактировать профиль)
 profileEditButton.addEventListener('click', function () {
@@ -191,7 +158,6 @@ avatarEditButton.addEventListener('click', function () {
 buttonAddCard.addEventListener('click', function () {
     popupAddCard.open();
 })
-
 
 const updateAvatarValidator = new FormValidator(validationConfig, formElementUpdateAvatar);
 updateAvatarValidator.enableValidation();

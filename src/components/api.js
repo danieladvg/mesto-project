@@ -91,6 +91,4 @@ export class Api {
         headers: this.options.headers
         })
     }
-
-
 }

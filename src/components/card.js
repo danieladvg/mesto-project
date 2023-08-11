@@ -24,6 +24,15 @@ export class Card {
 
     // добавляем слушатели событий
     _setEventListeners() {
+        this._element = this._getElement();
+        this._cardLikeButton = this._element.querySelector('.card__like-button');
+        this._trashButton = this._element.querySelector('.card__delete-button');
+        this._likeCounter = this._element.querySelector('.card__like-counter');
+        this._imageContainer = this._element.querySelector('.card__image');
+
+        this._titleElement = this._element.querySelector('.card__title');
+        this._imageElement = this._element.querySelector('.card__image');
+
         this._cardLikeButton.addEventListener('click', () => {
             Promise.all([this._handleLikeButton(this._cardId, this._checkOwnerLike())])
             .then(([res]) => {
@@ -71,17 +80,12 @@ export class Card {
 
     // заполнение карточки данными
     generate() {
-        this._element = this._getElement();
-        this._cardLikeButton = this._element.querySelector('.card__like-button');
-        this._trashButton = this._element.querySelector('.card__delete-button');
-        this._likeCounter = this._element.querySelector('.card__like-counter');
-        this._imageContainer = this._element.querySelector('.card__image');
         this._setEventListeners();
 
         this._element.dataset.id = this._cardId;
-        this._element.querySelector('.card__title').textContent = this._title;
-        this._element.querySelector('.card__image').src = this._image;
-        this._element.querySelector('.card__image').alt = this._title;
+        this._titleElement.textContent = this._title;
+        this._imageElement.src = this._image;
+        this._imageElement.alt = this._title;
 
         this._setLikeButtonState();
 

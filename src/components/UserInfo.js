@@ -15,19 +15,24 @@ export class UserInfo {
     }
 
     setUserInfo(data) {
-        Promise.all([this._editProfileInfo(data)])
-            .then(([res]) => {
-                this._profileName.textContent = res.name;
-                this._profileDescription.textContent = res.about;
-            })
-            .catch((err) => console.log(err));
+        let promise = new Promise((resolve, reject) => {
+            resolve(this._editProfileInfo(data));
+        });
+        promise.then(res => {
+            this._profileName.textContent = res.name;
+            this._profileDescription.textContent = res.about;
+            },
+            err => {console.log(err)});
+        return promise;
     }
 
     setAvatar(url) {
-        Promise.all([this._editAvatar(url)])
-        .then(([res]) => {
-            this._avatarImage.src = res.avatar;
-        })
-        .catch((err) => console.log(err));
+        let promise = new Promise((resolve, reject) => {
+            resolve(this._editAvatar(url));
+        });
+        promise.then(res => {this._avatarImage.src = res.avatar},
+                     err => {console.log(err)}              
+        );
+        return promise;   
     }
 }
